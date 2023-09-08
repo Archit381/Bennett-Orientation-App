@@ -1,0 +1,37 @@
+{
+  "expo": {
+    "name": "Bennett Orientation App 2023",
+    "slug": "app-ui",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/applogo.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/images/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.archit381.appui"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/applogo.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.archit381.appui"
+    },
+    "web": {
+      "favicon": "./assets/images/applogo.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "1f019947-b01a-451d-9998-e5229bc29f35"
+      }
+    }
+  }
+}
