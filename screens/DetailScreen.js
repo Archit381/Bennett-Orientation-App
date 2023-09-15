@@ -6,7 +6,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { ArrowLeftCircleIcon} from 'react-native-heroicons/outline';
 import { themeColors } from '../theme';
 
-import {clubItems } from '../constants';
 const {width, height} = Dimensions.get('window');
 const ios = Platform.OS == 'ios';
 
@@ -38,8 +37,6 @@ export default function DetailScreen(props) {
     setSelectedImage(null);
   };
   
-
-
 
   return (
     <ScrollView style={styles.container} >

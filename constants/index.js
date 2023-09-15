@@ -1,5 +1,3 @@
-import { Linking } from 'react-native'
-import { themeColors } from '../theme'
 
 export const categories = [
   {
