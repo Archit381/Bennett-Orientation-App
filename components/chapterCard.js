@@ -9,15 +9,16 @@ const ios = Platform.OS == 'ios';
 function ChapterCard({item}) {
   const navigation = useNavigation();
   return (
-
+    <TouchableOpacity 
+    onPress={()=> navigation.navigate('Details', {...item})}>
       <View 
         style={{
           borderRadius: 40, 
           backgroundColor: themeColors.bggray, 
           height: ios? height*0.5 : height*0.50, 
           width: width*0.65,
-        }} 
-        >
+        }} >
+          
         <View 
         style={{
           marginTop: ios? -(height*0.08): 15,
@@ -41,14 +42,14 @@ function ChapterCard({item}) {
               <Text className="px-4 text-black font-bold text-lg" >Learn More</Text>
               <TouchableOpacity 
               onPress={()=> navigation.navigate('Details', {...item})}
-              style={{
-                
-              }} className="p-4 bg-white rounded-full">
+              className="p-4 bg-white rounded-full">
                 <ArrowRightIcon size="35" strokeWidth={2} color={themeColors.bgblack} />
               </TouchableOpacity>
             </View>
           </View>
+          
       </View>
+      </TouchableOpacity>
     
   )
 }
