@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { ArrowLeftCircleIcon, MinusIcon, PlusIcon } from 'react-native-heroicons/outline';
+import { ArrowLeftCircleIcon} from 'react-native-heroicons/outline';
 import { themeColors } from '../theme';
 
 import {clubItems } from '../constants';

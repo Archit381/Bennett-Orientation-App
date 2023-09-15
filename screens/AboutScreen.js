@@ -10,12 +10,16 @@ import {
   StyleSheet,
   Linking,
 } from 'react-native';
+
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import { themeColors } from '../theme';
+import { useNavigation } from '@react-navigation/native'
+import { ArrowLeftCircleIcon} from 'react-native-heroicons/outline';
 
 const { width, height } = Dimensions.get('screen');
 const ITEM_WIDTH = width * 0.86;
+
 const ITEM_HEIGHT = ITEM_WIDTH * 1.47;
 const ios = Platform.OS == 'ios';
 
@@ -59,7 +63,9 @@ const data = [
 ];
 
 export default function App() {
+  const scrollY = React.useRef(new Animated.Value(1)).current;
   const scrollX = React.useRef(new Animated.Value(0)).current;
+  const navigation = useNavigation();
 
   return (
     <View style={styles.container}>
@@ -72,25 +78,14 @@ export default function App() {
             alignItems: 'center',
             paddingHorizontal: 16,
             paddingTop: 15,
+            backgroundColor: 'white',
           }}
         >
-          <Text style={{ fontSize: 40, fontWeight: 'bold', color: 'black' }}>
-            More about us
+          <Text style={{ fontSize: 35, fontWeight: 'bold', color: 'black' }}>
+            Upcoming Events
           </Text>
-          <TouchableOpacity
-            onPress={() =>
-              Linking.openURL('https://chat.whatsapp.com/JcF7cYIX8GyAGsz98SYVjF')
-            }
-          >
-            <Image
-              source={require('../assets/images/joinBTN.png')}
-              style={{
-                borderRadius: 30,
-                width: 80,
-                height: 50,
-                // tintColor: themeColors.bggray,
-              }}
-            />
+          <TouchableOpacity className=" rounded-full " onPress={()=> navigation.goBack()}>
+            <ArrowLeftCircleIcon size="50" strokeWidth={1.2} color="black" />
           </TouchableOpacity>
         </View>
         <Animated.FlatList
@@ -99,6 +94,7 @@ export default function App() {
           horizontal
           showsHorizontalScrollIndicator={false}
           pagingEnabled
+          backgroundColor='white'
           onScroll={Animated.event(
             [{ nativeEvent: { contentOffset: { x: scrollX } } }],
             { useNativeDriver: true }
@@ -118,12 +114,12 @@ export default function App() {
                 <View
                   style={{
                     borderRadius: 18,
-                    borderWidth: 10,
-                    borderColor: 'transparent',
+                    borderWidth: 5,
+                    borderColor: 'black',
                     
                     borderRadius: 18,
-                    padding: 12,
-                    backgroundColor: 'transparent',
+                    padding: 7,
+                    backgroundColor: 'white',
                   }}
                 >
                   <View
@@ -133,14 +129,16 @@ export default function App() {
                       overflow: 'hidden',
                       alignItems: 'center',
                       borderRadius: 14,
+                      // backgroundColor: 'white',
                     }}
                   >
                     <Animated.Image
                       source={{ uri: item.photo }}
                       style={{
-                        width: ITEM_WIDTH * 1.4,
+                        width: ITEM_WIDTH ,
                         height: ITEM_HEIGHT,
                         resizeMode: 'cover',
+                        // backgroundColor: 'white',
                         transform: [
                           {
                             translateX,
@@ -149,9 +147,9 @@ export default function App() {
                       }}
                     />
                   </View>
-                  <Text style={{ fontSize: 18, marginTop: 10, alignContent: 'center', fontWeight: 'bold' }}>
+                  {/* <Text style={{ fontSize: 18, marginTop: 10, alignContent: 'center', fontWeight: 'bold' }}>
                     {item.text}
-                  </Text>
+                  </Text> */}
                 </View>
               </View>
             );
@@ -165,9 +163,8 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'transparent',
+    backgroundColor: 'white',
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 25,
   },
 });
