@@ -1,43 +1,61 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, FlatList, Dimensions, StyleSheet, Image, ScrollView } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  FlatList,
+  Dimensions,
+  StyleSheet,
+  Image,
+  ScrollView,
+} from 'react-native';
 import { clubItems } from '../constants';
 import { themeColors } from '../theme';
-import { MagnifyingGlassIcon } from 'react-native-heroicons/outline'
-import { useNavigation } from '@react-navigation/native'
+import { MagnifyingGlassIcon } from 'react-native-heroicons/outline';
+import { useNavigation } from '@react-navigation/native';
 
-const { width, height } = Dimensions.get('window');
+const { height } = Dimensions.get('window');
 
 export default function SearchScreen() {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const navigation = useNavigation();
 
-  const handleSearch = () => {
-    const results = clubItems.filter(item => { 
-      const itemName = item.name.toLowerCase();
-      const itemTags = [item.tag1, item.tag2, item.tag3, item.tag4].join(' ').toLowerCase();
-      const searchLower = searchQuery.toLowerCase();
-  
-      return itemName.includes(searchLower) || itemTags.includes(searchLower);
-    });
-  
-    setSearchResults(results);
-  };
-  
+  useEffect(() => {
+    // Define a function for handling the search
+    const handleSearch = () => {
+      const results = clubItems.filter((item) => {
+        const itemName = item.name.toLowerCase();
+        const itemTags = [item.tag1, item.tag2, item.tag3, item.tag4]
+          .join(' ')
+          .toLowerCase();
+        const searchLower = searchQuery.toLowerCase();
+
+        return itemName.includes(searchLower) || itemTags.includes(searchLower);
+      });
+
+      setSearchResults(results);
+    };
+
+    // Call the handleSearch function whenever searchQuery changes
+    handleSearch();
+  }, [searchQuery]);
+
   return (
-    <View className="mx-5 " style={{marginTop: height*0.06 }}>
+    <View className="mx-5 " style={{ marginTop: height * 0.06 }}>
       <View className="flex-row items-center rounded-full p-1 bg-[#e6e6e6]">
         <View style={styles.searchInputContainer}>
           <TextInput
-            placeholder='Search for clubs and chapters...'
+            placeholder="Search for clubs and chapters..."
             style={styles.searchInput}
-            onChangeText={text => setSearchQuery(text)}
+            onChangeText={(text) => setSearchQuery(text)}
             value={searchQuery}
           />
           <TouchableOpacity
             className="rounded-full p-2"
-            style={{backgroundColor: themeColors.bgred}}
-            onPress={handleSearch}>
+            style={{ backgroundColor: themeColors.bgred }}
+          >
             <MagnifyingGlassIcon size="25" strokeWidth={2} color="white" />
           </TouchableOpacity>
         </View>
@@ -45,21 +63,20 @@ export default function SearchScreen() {
       <FlatList
         data={searchResults}
         renderItem={({ item }) => (
-        <TouchableOpacity onPress={() => navigation.navigate('Details', {...item})}>  
-          <View style={styles.resultCard}>            
-            <Image source={item.image} style={styles.clubLogo} />
-            <Text style={styles.resultTitle}>{item.name}</Text> 
-          </View>
-        </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('Details', { ...item })}>
+            <View style={styles.resultCard}>
+              <Image source={item.image} style={styles.clubLogo} />
+              <Text style={styles.resultTitle}>{item.name}</Text>
+            </View>
+          </TouchableOpacity>
         )}
-        keyExtractor={item => item.id.toString()}
+        keyExtractor={(item) => item.id.toString()}
         ListEmptyComponent={() => (
           <View style={styles.noResults}>
             {/*<Text style={styles.noResultsText}>No results found</Text>*/}
           </View>
         )}
-        />
-      
+      />
     </View>
   );
 }
