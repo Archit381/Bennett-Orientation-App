@@ -47,9 +47,12 @@ export default function DetailScreen(props) {
         style={{height: 300, borderBottomLeftRadius: 50, borderBottomRightRadius: 50}} 
         className="w-full absolute " />
       <SafeAreaView className="space-y-4 flex-1">
-        <View className="mx-4 flex-row justify-between items-center">
+        <View className="mx-4 flex-row justify-between items-center"> 
           <TouchableOpacity className=" rounded-full " onPress={()=> navigation.goBack()}>
+            <View className="flex-row justify-between">
             <ArrowLeftCircleIcon size="50" strokeWidth={1.2} color="white" />
+            <Text className="items-center">Go Back</Text>
+            </View>
           </TouchableOpacity>
         </View>
         <View 
