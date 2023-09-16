@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { ArrowLeftCircleIcon} from 'react-native-heroicons/outline';
+import { ArrowLeftCircleIcon, ArrowSmallLeftIcon} from 'react-native-heroicons/outline';
 import { themeColors } from '../theme';
 
 const {width, height} = Dimensions.get('window');
@@ -49,9 +49,11 @@ export default function DetailScreen(props) {
       <SafeAreaView className="space-y-4 flex-1">
         <View className="mx-4 flex-row justify-between items-center"> 
           <TouchableOpacity className=" rounded-full " onPress={()=> navigation.goBack()}>
-            <View className="flex-row justify-between">
-            <ArrowLeftCircleIcon size="50" strokeWidth={1.2} color="white" />
-            <Text className="items-center">Go Back</Text>
+            {/* <View className="flex-row justify-between items-center" styles={{backgroundColor: 'gray', borderRadius: 2}}> */}
+            <View style={{backgroundColor: item.accent}} 
+              className=" flex-row p-2 px-2 rounded-full items-center">
+            <ArrowSmallLeftIcon size="20" strokeWidth={1.2} color="white" />
+            <Text className="items-center text-white px-1">Back</Text>
             </View>
           </TouchableOpacity>
         </View>
