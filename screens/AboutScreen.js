@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   Linking,
+  ImageBackground,
 } from 'react-native';
 
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -25,40 +26,30 @@ const ios = Platform.OS == 'ios';
 
 const data = [
   {
-    key: '0',
-    photo: 'https://i.postimg.cc/x1jFSKg6/1.png',
-    text: 'Join our club and get to interact with Apple Representatives! Our club in collaboration with Apple, lets you attend exclusive workshops.',
+    logo: require('../assets/logos/GDSC.png'),
+    photo: require('../assets/gdsc.jpg'),
+    text: 'Event Info',
+    accent: '#f4db7b',
   },
   {
-    key: '1',
-    photo: 'https://i.postimg.cc/Dz8jSn9s/2.png',
-    text: "Join us for exclusive entry into the Mac Lab, your gateway to the world of Swift App Development! Don't miss out!",
+    logo: require('../assets/logos/CSI.png'),
+    photo: require('../assets/csi.jpg'),
+    text: "Event Info",
+    accent: '#183883',
   },
   {
-    key: '2',
-    photo: 'https://i.postimg.cc/tgwrP8bc/3.png',
-    text: 'Show us your technical writing and creative writing skills. Gather experience by writing technical blogs and content for our apps.',
+    logo: require('../assets/logos/wie.png'),
+    photo: require('../assets/wie.jpg'),
+    text: 'Event Info',
+    accent: '#75308b',
   },
   {
-    key: '3',
-    photo: 'https://i.postimg.cc/zGd2DVc8/4.png',
-    text: 'Master the art of building projects from scratch and gain valuable professional experience that sets you apart from the crowd.',
+    logo: require('../assets/logos/ibf.png'),
+    photo: require('../assets/ibf.jpg'),
+    text: 'Event Info',
+    accent: '#012251',
   },
-  {
-    key: '4',
-    photo: 'https://i.postimg.cc/cCG8ySGw/Kitchen-Kourier-1.png',
-    text: "Kitchen Kourier: We've simplified student and food vendor tasks on campus with an app connecting you to any campus food vendor.",
-  },
-  {
-    key: '5',
-    photo: 'https://i.postimg.cc/wB4HCcLp/kav.png',
-    text: 'Nischal: Finalist in Kavach 2023 Cybersecurity Hackathon with this AI-powered spam detection and personal chatbot app.',
-  },
-  {
-    key: '6',
-    photo: 'https://i.postimg.cc/htF00HYF/game-2.png',
-    text: 'Cube Bounce: Experiment with technologies like Gaming, AR/VR, Blockchain and many more, creating full-stack apps.',
-  },
+  
 
 ];
 
@@ -117,10 +108,12 @@ export default function App() {
                     // height: ITEM_HEIGHT,
                     borderRadius: 18,
                     borderWidth: 5,
+                    // borderColor: item.accent,
                     borderColor: 'black',
                     // marginBottom: 10,
                     borderRadius: 18,
                     padding: 7,
+                    marginBottom: 10,
                     backgroundColor: 'white',
                   }}
                 >
@@ -136,7 +129,7 @@ export default function App() {
                     }}
                   >
                     <Animated.Image
-                      source={{ uri: item.photo }}
+                      source={item.photo }
                       style={{
                         width: ITEM_WIDTH ,
                         height: ITEM_HEIGHT,
@@ -149,18 +142,33 @@ export default function App() {
                         ],
                       }}
                     />
-                    <Image 
-                      source={require('../assets/logos/CSI.png')}>
-                        
-                      </Image>
-                    
+                       
                   </View >
+                  <Image 
+                      source={item.logo}
+                      style={{
+                        width:40,
+                        height:40,
+                        borderRadius: 60,
+                        borderWidth: 3,
+                        // borderColor: item.accent,
+                        borderColor: 'black',
+                        backgroundColor: 'white',
+                        position: 'absolute',
+                        bottom: -25,
+                        right: 60,
+            
+                      }}>
+                  </Image>
+                  
+                  
                   
                   <Text style={{ fontSize: 15, marginTop: 10,textAlign: 'justify', alignContent: 'center'}}>
                     {item.text}
                   </Text>
                   
                 </View>
+                
               </View>
             );
           }}
