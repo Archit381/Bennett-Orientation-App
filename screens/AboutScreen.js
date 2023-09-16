@@ -113,10 +113,12 @@ export default function App() {
               <View style={{ width, justifyContent: 'center', alignItems: 'center' }}>
                 <View
                   style={{
+                    width: ITEM_WIDTH*1.07,
+                    // height: ITEM_HEIGHT,
                     borderRadius: 18,
                     borderWidth: 5,
                     borderColor: 'black',
-                    
+                    // marginBottom: 10,
                     borderRadius: 18,
                     padding: 7,
                     backgroundColor: 'white',
@@ -126,6 +128,7 @@ export default function App() {
                     style={{
                       width: ITEM_WIDTH,
                       height: ITEM_HEIGHT,
+                      // marginHorizontal: 17,
                       overflow: 'hidden',
                       alignItems: 'center',
                       borderRadius: 14,
@@ -146,10 +149,17 @@ export default function App() {
                         ],
                       }}
                     />
-                  </View>
-                  {/* <Text style={{ fontSize: 18, marginTop: 10, alignContent: 'center', fontWeight: 'bold' }}>
+                    <Image 
+                      source={require('../assets/logos/CSI.png')}>
+                        
+                      </Image>
+                    
+                  </View >
+                  
+                  <Text style={{ fontSize: 15, marginTop: 10,textAlign: 'justify', alignContent: 'center'}}>
                     {item.text}
-                  </Text> */}
+                  </Text>
+                  
                 </View>
               </View>
             );
@@ -166,5 +176,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     alignItems: 'center',
     justifyContent: 'center',
+    
   },
 });
