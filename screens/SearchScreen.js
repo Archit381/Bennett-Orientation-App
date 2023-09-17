@@ -27,7 +27,7 @@ export default function SearchScreen() {
     const handleSearch = () => {
       const results = clubItems.filter((item) => {
         const itemName = item.name.toLowerCase();
-        const itemTags = [item.tag1, item.tag2, item.tag3, item.tag4]
+        const itemTags = [item.tag1, item.tag2, item.tag3]
           .join(' ')
           .toLowerCase();
         const searchLower = searchQuery.toLowerCase();
@@ -38,7 +38,6 @@ export default function SearchScreen() {
       setSearchResults(results);
     };
 
-    // Call the handleSearch function whenever searchQuery changes
     handleSearch();
   }, [searchQuery]);
 
