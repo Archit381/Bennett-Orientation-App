@@ -35,7 +35,8 @@ const Loading = () => (
 
 const Backdrop = ({ movies, scrollX }) => {
   return (
-    <View style={{ height: BACKDROP_HEIGHT, width,paddingTop:80, position: 'absolute' }}>
+    <View style={{ height: BACKDROP_HEIGHT, width:width, position: 'absolute' }}>
+      
       <FlatList
         data={movies.reverse()}
         keyExtractor={(item) => item.key + '-backdrop'}
@@ -51,6 +52,7 @@ const Backdrop = ({ movies, scrollX }) => {
             // extrapolate:'clamp'
           });
           return (
+            
             <Animated.View
               removeClippedSubviews={false}
               style={{
@@ -60,6 +62,7 @@ const Backdrop = ({ movies, scrollX }) => {
                 overflow: 'hidden',
               }}
             >
+              
               <Image
                 source={{ uri: item.backdrop }}
                 style={{
@@ -68,10 +71,16 @@ const Backdrop = ({ movies, scrollX }) => {
                   position: 'absolute',
                 }}
               />
+              
             </Animated.View>
           );
         }}
       />
+      <View className={'flex-row'} style={{marginTop: 45, position: 'absolute',paddingHorizontal: 15,backgroundColor: 'rgba(255,255,255,0.9)',borderRadius: 50, alignSelf: 'center' }}>
+        <Image source={require('../logo1.png')} className={'h-9 w-9 p-1'} style={{marginVertical: 5}}/>
+        <Text style={{ alignSelf: 'center',padding: 9, fontSize: 20, fontWeight: 'bold', color: 'black'}}>Upcoming Events</Text>
+      </View>
+
       <LinearGradient
         colors={['rgba(0, 0, 0, 0)', 'white']}
         style={{
@@ -107,10 +116,12 @@ export default function App() {
 
   return (
     <ScrollView>
+      
     <View style={styles.container}>
-
+    <SafeAreaView style={{ marginBottom: -8 }}>
+        
+    </SafeAreaView>    
       <Backdrop movies={movies} scrollX={scrollX} />
-      <StatusBar/>
       <Animated.FlatList
         showsHorizontalScrollIndicator={false}
         data={movies}
@@ -153,9 +164,7 @@ export default function App() {
                   alignItems: 'center',
                   transform: [{ translateY }],
                   backgroundColor: 'white',
-                  marginBottom: 100,
-              
-                  
+                  marginBottom: 80,
                   borderRadius: 34,
                 }}
               >
@@ -163,12 +172,14 @@ export default function App() {
                   source={{ uri: item.poster }}
                   style={styles.posterImage}
                 />
-                <Text style={{ fontSize: 24 }} numberOfLines={1}>
+                
+                <Text style={{ fontSize: 20 }} numberOfLines={1}>
                   {item.title}
                 </Text>
                 <Text style={{ fontSize: 12, marginTop: 15 }} numberOfLines={3}>
                   {item.description}
                 </Text>
+                <Text style={{marginTop: 20}}>Date: {item.releaseDate}</Text>
               </Animated.View>
         
             </View>
