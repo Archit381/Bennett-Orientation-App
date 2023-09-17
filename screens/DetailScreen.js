@@ -5,7 +5,6 @@ import { StatusBar } from 'expo-status-bar';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ArrowLeftCircleIcon, MinusIcon, PlusIcon } from 'react-native-heroicons/outline';
 import { themeColors } from '../theme';
-import { PinchGestureHandler, State } from 'react-native-gesture-handler';
 
 const {width, height} = Dimensions.get('window');
 const ios = Platform.OS == 'ios';
@@ -13,7 +12,6 @@ const ios = Platform.OS == 'ios';
 
 export default function DetailScreen(props) {
   const item = props.route.params;
-  const [size, setSize] = useState('small');
   const navigation = useNavigation();
   const [selectedImage, setSelectedImage] = useState(null);
 
