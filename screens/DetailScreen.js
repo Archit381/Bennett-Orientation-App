@@ -1,9 +1,9 @@
-import { View, Text, TouchableOpacity, Image, Dimensions,StyleSheet, Modal, Platform,ScrollView, Linking } from 'react-native'
-import React, { useState } from 'react'
-import { useNavigation } from '@react-navigation/native'
+import { View, Animated, Text, TouchableOpacity, Image, Dimensions, StyleSheet, Modal, Platform, ScrollView, Linking, TouchableWithoutFeedback } from 'react-native';
+import React, { useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { ArrowLeftCircleIcon, ArrowSmallLeftIcon} from 'react-native-heroicons/outline';
+import { ArrowSmallLeftIcon } from 'react-native-heroicons/outline';
 import { themeColors } from '../theme';
 
 const {width, height} = Dimensions.get('window');
@@ -12,22 +12,25 @@ const ios = Platform.OS == 'ios';
 
 export default function DetailScreen(props) {
   const item = props.route.params;
-  const [size, setSize] = useState('small');
   const navigation = useNavigation();
   const [selectedImage, setSelectedImage] = useState(null);
 
-  const renderSocialMediaButton = (url, iconSource) => {
+const renderSocialMediaButton = (url, iconSource) => {
     if (url !== 'none') {
       return (
         <TouchableOpacity onPress={() => Linking.openURL(url)}>
           <Image
             source={iconSource}
-            style={{width: 50, height: 50 , borderRadius: 50,marginLeft: 40, marginBottom: 10,marginTop: -5}}/>
+            style={{width: 40, height: 40 , marginLeft: 40, marginBottom: 10,marginTop: -5}}/>
         </TouchableOpacity>
       );
     }
     return null; 
   };
+
+
+const scale = new Animated.Value(1);
+
 
   const openModal = (imageSource) => {
     setSelectedImage(imageSource);
@@ -158,16 +161,32 @@ export default function DetailScreen(props) {
         
       </SafeAreaView>
 
-      {selectedImage && (
-        <Modal visible={selectedImage !== null} transparent={true} animationType="slide">
-          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.9)' }}>
-            <TouchableOpacity onPress={closeModal} style={{ position: 'absolute', top: 20, right: 20, zIndex: 1 }}>
-              <Text style={{ color: 'white', fontSize: 24 }}>X</Text>
-            </TouchableOpacity>
+  {selectedImage && (
+  <Modal visible={selectedImage !== null} transparent={true} animationType="fade">
+    <TouchableWithoutFeedback onPress={closeModal}>
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.5)' }}>
+
+          <Animated.View
+            style={{
+              flex: 1,
+              justifyContent: 'center',
+              alignItems: 'center',
+              transform: [{ scale: scale }],
+              backgroundColor: 'rgba(255,255,255,1)',
+              padding: 20 
+            }}
+          >
             <Image source={selectedImage} style={{ width: width - 40, height: height / 1.5 }} resizeMode="contain" />
-          </View>
-        </Modal>
-      )}    
+          </Animated.View>
+      </View>
+    </TouchableWithoutFeedback>
+  </Modal>
+)}
+
+
+
+
+    
 
 
 
@@ -180,10 +199,11 @@ export default function DetailScreen(props) {
   </Text>
 </View>
 <View className={'px-4 flex-row'}>
-    {renderSocialMediaButton(item.wp, require('../assets/icons/whats.png'))}
+    
     {renderSocialMediaButton(item.web, require('../assets/icons/webs.png'))}
     {renderSocialMediaButton(item.insta, require('../assets/icons/inst.png'))}
     {renderSocialMediaButton(item.lk, require('../assets/icons/linkedin.png'))}
+    {renderSocialMediaButton(item.wp, require('../assets/icons/whats.png'))}
 </View>
 <View className={`space-y-3 ${ios? 'mb-6': 'mb-3'}`}>
           <View className="flex-row justify-between items-center px-4 mb-2">
