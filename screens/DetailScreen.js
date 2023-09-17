@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { ArrowLeftCircleIcon, ArrowSmallLeftIcon} from 'react-native-heroicons/outline';
+import { ArrowSmallLeftIcon } from 'react-native-heroicons/outline';
 import { themeColors } from '../theme';
 
 const {width, height} = Dimensions.get('window');
@@ -21,7 +21,7 @@ const renderSocialMediaButton = (url, iconSource) => {
         <TouchableOpacity onPress={() => Linking.openURL(url)}>
           <Image
             source={iconSource}
-            style={{width: 50, height: 50 , borderRadius: 50,marginLeft: 40, marginBottom: 10,marginTop: -5}}/>
+            style={{width: 40, height: 40 , marginLeft: 40, marginBottom: 10,marginTop: -5}}/>
         </TouchableOpacity>
       );
     }
@@ -199,10 +199,11 @@ const scale = new Animated.Value(1);
   </Text>
 </View>
 <View className={'px-4 flex-row'}>
-    {renderSocialMediaButton(item.wp, require('../assets/icons/whats.png'))}
+    
     {renderSocialMediaButton(item.web, require('../assets/icons/webs.png'))}
     {renderSocialMediaButton(item.insta, require('../assets/icons/inst.png'))}
     {renderSocialMediaButton(item.lk, require('../assets/icons/linkedin.png'))}
+    {renderSocialMediaButton(item.wp, require('../assets/icons/whats.png'))}
 </View>
 <View className={`space-y-3 ${ios? 'mb-6': 'mb-3'}`}>
           <View className="flex-row justify-between items-center px-4 mb-2">

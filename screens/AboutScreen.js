@@ -3,18 +3,14 @@ import {
   Animated,
   Dimensions,
   Image,
-  FlatList,
   Text,  
   View,
   TouchableOpacity,
   StyleSheet,
-  Linking,
-  ImageBackground,
 } from 'react-native';
 
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
-import { themeColors } from '../theme';
 import { useNavigation } from '@react-navigation/native'
 import { ArrowLeftCircleIcon} from 'react-native-heroicons/outline';
 
@@ -151,8 +147,8 @@ export default function App() {
                         height:40,
                         borderRadius: 60,
                         borderWidth: 3,
-                        // borderColor: item.accent,
-                        borderColor: 'black',
+                        borderColor: item.accent,
+                        // borderColor: 'black',
                         backgroundColor: 'white',
                         position: 'absolute',
                         bottom: -25,
