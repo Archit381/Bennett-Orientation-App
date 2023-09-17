@@ -1,189 +1,99 @@
-import * as React from 'react';
-import {
-  Animated,
-  Dimensions,
-  Image,
-  FlatList,
-  Text,  
-  View,
-  TouchableOpacity,
-  StyleSheet,
-  Linking,
-  ImageBackground,
-} from 'react-native';
-
+import React, { useState, useEffect } from 'react';
+import { View, Text, Image, TouchableOpacity, Dimensions, Platform, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { StatusBar } from 'expo-status-bar';
 import { themeColors } from '../theme';
-import { useNavigation } from '@react-navigation/native'
-import { ArrowLeftCircleIcon} from 'react-native-heroicons/outline';
+import { StatusBar } from 'expo-status-bar';
+import { categories, clubItems } from '../constants';
+import Carousel from 'react-native-snap-carousel';
+import { MapPinIcon } from 'react-native-heroicons/solid';
+import ChapterCard from '../components/chapterCard';
+import { useNavigation } from '@react-navigation/native';
 
-const { width, height } = Dimensions.get('screen');
-const ITEM_WIDTH = width * 0.86;
-
-const ITEM_HEIGHT = ITEM_WIDTH * 1.47;
+const { width, height } = Dimensions.get('window');
 const ios = Platform.OS == 'ios';
 
-const data = [
-  {
-    logo: require('../assets/logos/GDSC.png'),
-    photo: require('../assets/gdsc.jpg'),
-    text: 'Event Info',
-    accent: '#f4db7b',
-  },
-  {
-    logo: require('../assets/logos/CSI.png'),
-    photo: require('../assets/csi.jpg'),
-    text: "Event Info",
-    accent: '#183883',
-  },
-  {
-    logo: require('../assets/logos/wie.png'),
-    photo: require('../assets/wie.jpg'),
-    text: 'Event Info',
-    accent: '#75308b',
-  },
-  {
-    logo: require('../assets/logos/ibf.png'),
-    photo: require('../assets/ibf.jpg'),
-    text: 'Event Info',
-    accent: '#012251',
-  },
-  
-
-];
-
-export default function App() {
-  const scrollY = React.useRef(new Animated.Value(1)).current;
-  const scrollX = React.useRef(new Animated.Value(0)).current;
+export default function AboutScreen() {
+  const [activeCategory, setActiveCategory] = useState(1);
+  const [filteredClubItems, setFilteredClubItems] = useState([]);
   const navigation = useNavigation();
+  
+  // Updating club names when category is changing
+  
+  useEffect(() => {
+    const filteredItems = clubItems.filter(item => {
+      return (
+        item.tag1 === categories[activeCategory - 1].title.toLowerCase() ||
+        item.tag2 === categories[activeCategory - 1].title.toLowerCase() ||
+        item.tag3 === categories[activeCategory - 1].title.toLowerCase() ||
+        item.tag4 === categories[activeCategory - 1].title.toLowerCase()
+      );
+    });
+    setFilteredClubItems(filteredItems);
+  }, [activeCategory]);
 
   return (
-    <View style={styles.container}>
+    
+    <View style={{ flex: 1, backgroundColor: 'white' }}>
       <StatusBar />
       <SafeAreaView style={ios ? { marginBottom: -8 } : {}}>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            paddingHorizontal: 16,
-            paddingTop: 15,
-            backgroundColor: 'white',
-          }}
-        >
-          <Text style={{ fontSize: 35, fontWeight: 'bold', color: 'black' }}>
-            Upcoming Events
-          </Text>
-          <TouchableOpacity className=" rounded-full " onPress={()=> navigation.goBack()}>
-            <ArrowLeftCircleIcon size="50" strokeWidth={1.2} color="black" />
-          </TouchableOpacity>
+
+        {/* University Logo and Name */}
+
+        <View className="mx-4 flex-row  items-center space-x-20">
+          <Image source={require('../assets/images/uni_logo.png')} 
+            className="h-11 w-9 top-2" />
+          <View style={{ flexDirection: 'row', alignItems: 'center', marginLeft: 8 }}>
+            <MapPinIcon size={27} color={themeColors.bgred} />
+            <Text style={{ fontWeight: 'bold', fontSize: 18 }}>Bennett University</Text>
+          </View>
         </View>
-        <Animated.FlatList
-          data={data}
-          keyExtractor={(item) => item.key}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          pagingEnabled
-          backgroundColor='white'
-          onScroll={Animated.event(
-            [{ nativeEvent: { contentOffset: { x: scrollX } } }],
-            { useNativeDriver: true }
-          )}
-          renderItem={({ item, index }) => {
-            const inputRange = [
-              (index - 1) * width,
-              index * width,
-              (index + 1) * width,
-            ];
-            const translateX = scrollX.interpolate({
-              inputRange,
-              outputRange: [-width * 0.7, 0, width * 0.7],
-            });
-            return (
-              <View style={{ width, justifyContent: 'center', alignItems: 'center' }}>
-                <View
-                  style={{
-                    width: ITEM_WIDTH*1.07,
-                    // height: ITEM_HEIGHT,
-                    borderRadius: 18,
-                    borderWidth: 5,
-                    // borderColor: item.accent,
-                    borderColor: 'black',
-                    // marginBottom: 10,
-                    borderRadius: 18,
-                    padding: 7,
-                    marginBottom: 10,
-                    backgroundColor: 'white',
-                  }}
-                >
-                  <View
-                    style={{
-                      width: ITEM_WIDTH,
-                      height: ITEM_HEIGHT,
-                      // marginHorizontal: 17,
-                      overflow: 'hidden',
-                      alignItems: 'center',
-                      borderRadius: 14,
-                      // backgroundColor: 'white',
-                    }}
-                  >
-                    <Animated.Image
-                      source={item.photo }
-                      style={{
-                        width: ITEM_WIDTH ,
-                        height: ITEM_HEIGHT,
-                        resizeMode: 'cover',
-                        // backgroundColor: 'white',
-                        transform: [
-                          {
-                            translateX,
-                          },
-                        ],
-                      }}
-                    />
-                       
-                  </View >
-                  <Image 
-                      source={item.logo}
-                      style={{
-                        width:40,
-                        height:40,
-                        borderRadius: 60,
-                        borderWidth: 3,
-                        // borderColor: item.accent,
-                        borderColor: 'black',
-                        backgroundColor: 'white',
-                        position: 'absolute',
-                        bottom: -25,
-                        right: 60,
-            
-                      }}>
-                  </Image>
+
+        <View style={{ marginHorizontal: 16, shadowColor: 'rgba(0, 0, 0, 0.2)', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 1, shadowRadius: 2, marginTop: 16 }}>
+          <Text style={{ fontSize: 40, fontWeight: 'bold', color: themeColors.textNeutral }}>Let's Discover</Text>
+        </View>
+
+        {/* Adding Categories */}
+          
+        <View style={{ paddingHorizontal: 16, marginTop: 24, marginBottom: 50 }}>
+          <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+            {categories.map(item => (
+              <TouchableOpacity
+                key={item.id}
+                onPress={() => setActiveCategory(item.id)}
+                style={{
+                  backgroundColor: item.id === activeCategory ? themeColors.bgblue : 'rgba(0,0,0,0.07)',
+                  paddingHorizontal: 16,
+                  paddingVertical: 8,
+                  borderRadius: 24,
                   
+                  marginRight: 8,
                   
-                  
-                  <Text style={{ fontSize: 15, marginTop: 10,textAlign: 'justify', alignContent: 'center'}}>
-                    {item.text}
-                  </Text>
-                  
-                </View>
-                
-              </View>
-            );
-          }}
-        />
+                }}
+              >
+                <Text style={{ fontWeight: 'bold', color: item.id === activeCategory ? 'white' : 'gray' }}>{item.title}</Text>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+        </View>
+
       </SafeAreaView>
+
+      {/* Adding Chapters/Clubs cards */}
+      
+      <View style={{ flex: 1, justifyContent: 'center', marginTop: ios ? 2 : 0 }}>
+        <Carousel
+          data={filteredClubItems}
+          renderItem={({ item }) => <ChapterCard item={item} />}
+          firstItem={1}
+          loop={true}
+          inactiveSlideScale={0.75}
+          inactiveSlideOpacity={0.75}
+          sliderWidth={width}
+          itemWidth={width * 0.63}
+          slideStyle={{ alignItems: 'center' }}
+        />
+      </View>
+    
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: 'white',
-    alignItems: 'center',
-    justifyContent: 'center',
-    
-  },
-});

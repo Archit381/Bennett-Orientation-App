@@ -6,11 +6,12 @@ import { LogBox, Platform, View } from 'react-native';
 import DetailScreen from '../screens/DetailScreen';
 import SearchScreen from '../screens/SearchScreen';
 import AboutScreen from '../screens/AboutScreen';
+import ProjectScreen from '../screens/ProjectScreen';
 import { themeColors } from '../theme';
 import { MagnifyingGlassIcon, ArchiveBoxIcon } from 'react-native-heroicons/outline'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import {HomeIcon as HomeOutline, ShoppingBagIcon as BagOutline } from 'react-native-heroicons/outline';
-import {HomeIcon as HomeSolid, ShoppingBagIcon as BagSolid, DocumentMagnifyingGlassIcon} from 'react-native-heroicons/solid';
+import {HomeIcon as HomeOutline, } from 'react-native-heroicons/outline';
+import {HomeIcon as HomeSolid} from 'react-native-heroicons/solid';
 
 
 const Stack = createNativeStackNavigator();
@@ -63,6 +64,7 @@ function HomeTabs(){
       <Tab.Screen name="home" component={HomeScreen} />
       <Tab.Screen name="search" component={SearchScreen} /> 
       <Tab.Screen name="info" component={AboutScreen} />
+      <Tab.Screen name="project" component={ProjectScreen} />
     </Tab.Navigator>
   )
 }
@@ -78,6 +80,8 @@ const menuIcons = (route, focused)=> {
     icon =  focused? <MagnifyingGlassIcon size="30" color={themeColors.bgred} /> : <MagnifyingGlassIcon size="30" strokeWidth={2} color="white" />
   }else if(route.name==='info'){
     icon =  focused? <ArchiveBoxIcon size="30" color={themeColors.bgred} /> : <ArchiveBoxIcon size="30" strokeWidth={2} color="white" />
+  }else if(route.name==='project'){
+    icon =  focused? <HomeSolid size="30" color={themeColors.bgred} /> : <HomeOutline size="30" strokeWidth={2} color="white" />
   }
 
   
