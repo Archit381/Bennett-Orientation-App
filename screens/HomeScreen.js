@@ -1,276 +1,215 @@
 
-
 import * as React from 'react';
 import {
   StatusBar,
-  Image,
-  FlatList,
-  Dimensions,
-  Animated,
   Text,
   View,
   StyleSheet,
-  SafeAreaView,
+  FlatList,
+  Image,
+  Dimensions,
+  Animated,
+  TouchableOpacity,
+  Platform,
 } from 'react-native';
-const { width } = Dimensions.get('screen');
-import { EvilIcons } from '@expo/vector-icons';
-import {
-  FlingGestureHandler,
-  Directions,
-  State,
-} from 'react-native-gesture-handler';
+import { SafeAreaView } from 'react-native-safe-area-context';
+const { width, height } = Dimensions.get('window');
+import { getMovies } from '../api';
+import { MapPinIcon } from 'react-native-heroicons/solid';
+import { themeColors } from '../theme';
+import { LinearGradient } from 'expo-linear-gradient';
+import { ScrollView } from 'react-native-gesture-handler';
 
-// https://www.creative-flyers.com
-const DATA = [
-  {
-    title: 'Afro vibes',
-    location: 'Mumbai, India',
-    date: 'Nov 17th, 2020',
-    poster:
-      'https://www.creative-flyers.com/wp-content/uploads/2020/07/Afro-vibes-flyer-template.jpg',
-  },
-  {
-    title: 'Jungle Party',
-    location: 'Unknown',
-    date: 'Sept 3rd, 2020',
-    poster:
-      'https://www.creative-flyers.com/wp-content/uploads/2019/11/Jungle-Party-Flyer-Template-1.jpg',
-  },
-  {
-    title: '4th Of July',
-    location: 'New York, USA',
-    date: 'Oct 11th, 2020',
-    poster:
-      'https://www.creative-flyers.com/wp-content/uploads/2020/06/4th-Of-July-Invitation.jpg',
-  },
-  {
-    title: 'Summer festival',
-    location: 'Bucharest, Romania',
-    date: 'Aug 17th, 2020',
-    poster:
-      'https://www.creative-flyers.com/wp-content/uploads/2020/07/Summer-Music-Festival-Poster.jpg',
-  },
-  {
-    title: 'BBQ with friends',
-    location: 'Prague, Czech Republic',
-    date: 'Sept 11th, 2020',
-    poster:
-      'https://www.creative-flyers.com/wp-content/uploads/2020/06/BBQ-Flyer-Psd-Template.jpg',
-  },
-  {
-    title: 'Festival music',
-    location: 'Berlin, Germany',
-    date: 'Apr 21th, 2021',
-    poster:
-      'https://www.creative-flyers.com/wp-content/uploads/2020/06/Festival-Music-PSD-Template.jpg',
-  },
-  {
-    title: 'Beach House',
-    location: 'Liboa, Portugal',
-    date: 'Aug 12th, 2020',
-    poster:
-      'https://www.creative-flyers.com/wp-content/uploads/2020/06/Summer-Beach-House-Flyer.jpg',
-  },
-];
-
-const OVERFLOW_HEIGHT = 70;
 const SPACING = 10;
-const ITEM_WIDTH = width * 0.76;
-const ITEM_HEIGHT = ITEM_WIDTH * 1.7;
-const VISIBLE_ITEMS = 3;
+const ITEM_SIZE = Platform.OS === 'ios' ? width * 0.72 : width * 0.74;
+const EMPTY_ITEM_SIZE = (width - ITEM_SIZE) / 2;
+const BACKDROP_HEIGHT = height * 0.65;
+const FRONTDROP_HEIGHT=height-BACKDROP_HEIGHT;
+const ios = Platform.OS == 'ios';
 
-const OverflowItems = ({ data, scrollXAnimated }) => {
-  const inputRange = [-1, 0, 1];
-  const translateY = scrollXAnimated.interpolate({
-    inputRange,
-    outputRange: [OVERFLOW_HEIGHT, 0, -OVERFLOW_HEIGHT],
-  });
+const Loading = () => (
+  <View style={styles.loadingContainer}>
+    <Text style={styles.paragraph}>Loading...</Text>
+  </View>
+);
+
+const Backdrop = ({ movies, scrollX }) => {
   return (
-    <View style={styles.overflowContainer}>
-      <Animated.View style={{ transform: [{ translateY }] }}>
-        {data.map((item, index) => {
+    <View style={{ height: BACKDROP_HEIGHT, width,paddingTop:80, position: 'absolute' }}>
+      <FlatList
+        data={movies.reverse()}
+        keyExtractor={(item) => item.key + '-backdrop'}
+        removeClippedSubviews={false}
+        contentContainerStyle={{ width, height: BACKDROP_HEIGHT }}
+        renderItem={({ item, index }) => {
+          if (!item.backdrop) {
+            return null;
+          }
+          const translateX = scrollX.interpolate({
+            inputRange: [(index - 2) * ITEM_SIZE, (index - 1) * ITEM_SIZE],
+            outputRange: [0, width],
+            // extrapolate:'clamp'
+          });
           return (
-            <View key={index} style={styles.itemContainer}>
-              <Text style={[styles.title]} numberOfLines={1}>
-                {item.title}
-              </Text>
-              <View style={styles.itemContainerRow}>
-                <Text style={[styles.location]}>
-                  <EvilIcons
-                    name='location'
-                    size={16}
-                    color='black'
-                    style={{ marginRight: 5 }}
-                  />
-                  {item.location}
-                </Text>
-                <Text style={[styles.date]}>{item.date}</Text>
-              </View>
-            </View>
+            <Animated.View
+              removeClippedSubviews={false}
+              style={{
+                position: 'absolute',
+                width: translateX,
+                height,
+                overflow: 'hidden',
+              }}
+            >
+              <Image
+                source={{ uri: item.backdrop }}
+                style={{
+                  width,
+                  height: BACKDROP_HEIGHT,
+                  position: 'absolute',
+                }}
+              />
+            </Animated.View>
           );
-        })}
-      </Animated.View>
+        }}
+      />
+      <LinearGradient
+        colors={['rgba(0, 0, 0, 0)', 'white']}
+        style={{
+          height: BACKDROP_HEIGHT,
+          width,
+          position: 'absolute',
+          bottom: 0,
+        }}
+      />
     </View>
   );
 };
 
 export default function App() {
-  const [data, setData] = React.useState(DATA);
-  const scrollXIndex = React.useRef(new Animated.Value(0)).current;
-  const scrollXAnimated = React.useRef(new Animated.Value(0)).current;
-  const [index, setIndex] = React.useState(0);
-  const setActiveIndex = React.useCallback((activeIndex) => {
-    scrollXIndex.setValue(activeIndex);
-    setIndex(activeIndex);
-  });
-
+  const [movies, setMovies] = React.useState([]);
+  const scrollX = React.useRef(new Animated.Value(0)).current;
   React.useEffect(() => {
-    if (index === data.length - VISIBLE_ITEMS - 1) {
-      // get new data
-      // fetch more data
-      const newData = [...data, ...data];
-      setData(newData);
+    const fetchData = async () => {
+      const movies = await getMovies();
+      // Add empty items to create fake space
+      // [empty_item, ...movies, empty_item]
+      setMovies([{ key: 'empty-left' }, ...movies, { key: 'empty-right' }]);
+    };
+
+    if (movies.length === 0) {
+      fetchData(movies);
     }
-  });
+  }, [movies]);
 
-  React.useEffect(() => {
-    Animated.spring(scrollXAnimated, {
-      toValue: scrollXIndex,
-      useNativeDriver: true,
-    }).start();
-  });
+  if (movies.length === 0) {
+    return <Loading />;
+  }
 
   return (
-    <FlingGestureHandler
-      key='left'
-      direction={Directions.LEFT}
-      onHandlerStateChange={(ev) => {
-        if (ev.nativeEvent.state === State.END) {
-          if (index === data.length - 1) {
-            return;
-          }
-          setActiveIndex(index + 1);
-        }
-      }}
-    >
-      <FlingGestureHandler
-        key='right'
-        direction={Directions.RIGHT}
-        onHandlerStateChange={(ev) => {
-          if (ev.nativeEvent.state === State.END) {
-            if (index === 0) {
-              return;
-            }
-            setActiveIndex(index - 1);
-          }
-        }}
-      >
-        <SafeAreaView style={styles.container}>
-          <StatusBar hidden />
-          <OverflowItems data={data} scrollXAnimated={scrollXAnimated} />
-          <FlatList
-            data={data}
-            keyExtractor={(_, index) => String(index)}
-            horizontal
-            inverted
-            contentContainerStyle={{
-              flex: 1,
-              justifyContent: 'center',
-              padding: SPACING * 2,
-              marginTop: 50,
-            }}
-            scrollEnabled={false}
-            removeClippedSubviews={false}
-            CellRendererComponent={({
-              item,
-              index,
-              children,
-              style,
-              ...props
-            }) => {
-              const newStyle = [style, { zIndex: data.length - index }];
-              return (
-                <View style={newStyle} index={index} {...props}>
-                  {children}
-                </View>
-              );
-            }}
-            renderItem={({ item, index }) => {
-              const inputRange = [index - 1, index, index + 1];
-              const translateX = scrollXAnimated.interpolate({
-                inputRange,
-                outputRange: [50, 0, -100],
-              });
-              const scale = scrollXAnimated.interpolate({
-                inputRange,
-                outputRange: [0.8, 1, 1.3],
-              });
-              const opacity = scrollXAnimated.interpolate({
-                inputRange,
-                outputRange: [1 - 1 / VISIBLE_ITEMS, 1, 0],
-              });
+    <ScrollView>
+    <View style={styles.container}>
 
-              return (
-                <Animated.View
-                  style={{
-                    position: 'absolute',
-                    left: -ITEM_WIDTH / 2,
-                    opacity,
-                    transform: [
-                      {
-                        translateX,
-                      },
-                      { scale },
-                    ],
-                  }}
-                >
-                  <Image
-                    source={{ uri: item.poster }}
-                    style={{
-                      width: ITEM_WIDTH,
-                      height: ITEM_HEIGHT,
-                      borderRadius: 14,
-                    }}
-                  />
-                </Animated.View>
-              );
-            }}
-          />
-        </SafeAreaView>
-      </FlingGestureHandler>
-    </FlingGestureHandler>
+      <Backdrop movies={movies} scrollX={scrollX} />
+      <StatusBar/>
+      <Animated.FlatList
+        showsHorizontalScrollIndicator={false}
+        data={movies}
+        keyExtractor={(item) => item.key}
+        horizontal
+        bounces={false}
+        decelerationRate={Platform.OS === 'ios' ? 0 : 0.98}
+        renderToHardwareTextureAndroid
+        contentContainerStyle={{ alignItems: 'center' }}
+        snapToInterval={ITEM_SIZE}
+        snapToAlignment='start'
+        onScroll={Animated.event(
+          [{ nativeEvent: { contentOffset: { x: scrollX } } }],
+          { useNativeDriver: false }
+        )}
+        scrollEventThrottle={16}
+        renderItem={({ item, index }) => {
+          if (!item.poster) {
+            return <View style={{ width: EMPTY_ITEM_SIZE }} />;
+          }
+
+          const inputRange = [
+            (index - 2) * ITEM_SIZE,
+            (index - 1) * ITEM_SIZE,
+            index * ITEM_SIZE,
+          ];
+
+          const translateY = scrollX.interpolate({
+            inputRange,
+            outputRange: [100, 50, 100],
+            extrapolate: 'clamp',
+          });
+
+          return (
+            <View style={{ width: ITEM_SIZE }}>
+              <Animated.View
+                style={{
+                  marginHorizontal: SPACING,
+                  padding: SPACING * 2,
+                  alignItems: 'center',
+                  transform: [{ translateY }],
+                  backgroundColor: 'white',
+                  marginBottom: 100,
+              
+                  
+                  borderRadius: 34,
+                }}
+              >
+                <Image
+                  source={{ uri: item.poster }}
+                  style={styles.posterImage}
+                />
+                <Text style={{ fontSize: 24 }} numberOfLines={1}>
+                  {item.title}
+                </Text>
+                <Text style={{ fontSize: 12, marginTop: 15 }} numberOfLines={3}>
+                  {item.description}
+                </Text>
+              </Animated.View>
+        
+            </View>
+            
+          );
+        }}
+      />
+    </View>
+    
+    <View>
+                <Text style={{alignContent: 'center', fontSize: 43}}>hello</Text>
+                <Text style={{alignContent: 'center', fontSize: 43}}>hello</Text>
+                <Text style={{alignContent: 'center', fontSize: 43}}>hello</Text>
+                <Text style={{alignContent: 'center', fontSize: 43}}>hello</Text>
+    </View>          
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  loadingContainer: {
     flex: 1,
-    justifyContent: 'center',
-    backgroundColor: '#fff',
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: '900',
-    textTransform: 'uppercase',
-    letterSpacing: -1,
-  },
-  location: {
-    fontSize: 16,
-  },
-  date: {
-    fontSize: 12,
-  },
-  itemContainer: {
-    height: OVERFLOW_HEIGHT,
-    padding: SPACING * 2,
-  },
-  itemContainerRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
+    justifyContent: 'center',
   },
-  overflowContainer: {
-    height: OVERFLOW_HEIGHT,
-    overflow: 'hidden',
+  container: {
+    flex: 0,
+    height:height,
+  },
+  paragraph: {
+    margin: 24,
+    fontSize: 18,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  posterImage: {
+    width: '100%',
+    height: ITEM_SIZE * 1.2,
+    resizeMode: 'cover',
+    borderRadius: 24,
+    margin: 0,
+    marginBottom: 10,
   },
 });
