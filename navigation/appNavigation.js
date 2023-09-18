@@ -8,7 +8,7 @@ import SearchScreen from '../screens/SearchScreen';
 import AboutScreen from '../screens/AboutScreen';
 import ProjectScreen from '../screens/ProjectScreen';
 import { themeColors } from '../theme';
-import { MagnifyingGlassIcon, ArchiveBoxIcon } from 'react-native-heroicons/outline'
+import { MagnifyingGlassIcon, ArchiveBoxIcon,CloudArrowUpIcon,PuzzlePieceIcon } from 'react-native-heroicons/outline'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {HomeIcon as HomeOutline, } from 'react-native-heroicons/outline';
 import {HomeIcon as HomeSolid} from 'react-native-heroicons/solid';
@@ -81,7 +81,7 @@ const menuIcons = (route, focused)=> {
   }else if(route.name==='info'){
     icon =  focused? <ArchiveBoxIcon size="30" color={themeColors.bgred} /> : <ArchiveBoxIcon size="30" strokeWidth={2} color="white" />
   }else if(route.name==='project'){
-    icon =  focused? <HomeSolid size="30" color={themeColors.bgred} /> : <HomeOutline size="30" strokeWidth={2} color="white" />
+    icon =  focused? <PuzzlePieceIcon size="30" color={themeColors.bgred} /> : <PuzzlePieceIcon size="30" strokeWidth={2} color="white" />
   }
 
   

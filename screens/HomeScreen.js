@@ -20,6 +20,7 @@ import { MapPinIcon } from 'react-native-heroicons/solid';
 import { themeColors } from '../theme';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ScrollView } from 'react-native-gesture-handler';
+import { Bold } from 'react-native-feather';
 
 const SPACING = 10;
 const ITEM_SIZE = Platform.OS === 'ios' ? width * 0.72 : width * 0.74;
@@ -27,6 +28,7 @@ const EMPTY_ITEM_SIZE = (width - ITEM_SIZE) / 2;
 const BACKDROP_HEIGHT = height * 0.65;
 const FRONTDROP_HEIGHT=height-BACKDROP_HEIGHT;
 const ios = Platform.OS == 'ios';
+
 
 const Loading = () => (
   <View style={styles.loadingContainer}>
@@ -167,7 +169,7 @@ export default function App () {
                   alignItems: 'center',
                   transform: [{ translateY }],
                   backgroundColor: 'white',
-                  marginBottom: 80,
+                  marginBottom:90,
                   borderRadius: 34,
                 }}
               >
@@ -176,29 +178,29 @@ export default function App () {
                   style={styles.posterImage}
                 />
                 
-                <Text style={{ fontSize: 20 }} numberOfLines={1}>
+                <Text style={{ fontSize: 20, marginTop: 10 }} numberOfLines={1}>
                   {item.title}
                 </Text>
-                <Text style={{ fontSize: 12, marginTop: 15 }} numberOfLines={3}>
+                <Text style={{ fontSize: 12, marginTop: 15, marginBottom: 30 }} numberOfLines={3}>
                   {item.description}
                 </Text>
                 <Text style={{marginTop: 20}}>Date: {item.releaseDate}</Text>
-                <TouchableOpacity style={{bottom: -20,
-                        right: 70,position: 'absolute',}}>
-                {/* <Image 
-                      // Add the emoji animation effect when i click on this image
+                {/* <TouchableOpacity style={{bottom: -20,
+                        right: 30,position: 'absolute',}}>
+                <Image 
+                      
                       source={require('../assets/logos/wie.png')}
                       style={{
-                        width:30,
-                        height:30,
+                        width:50,
+                        height:50,
                         borderRadius: 60,
-                        // borderWidth: 3,
-                        // borderColor: item.accent,
+                        borderWidth: 1,
+                        borderColor: item.accent,
                         borderColor: 'black',
                         backgroundColor: 'white',
                       }}>
-              </Image> */}
-              </TouchableOpacity>
+              </Image>
+              </TouchableOpacity> */}
               
               </Animated.View>
               
@@ -211,10 +213,79 @@ export default function App () {
     </View>
     
     <View>
-                <Text style={{alignContent: 'center', fontSize: 43}}>hello</Text>
-                <Text style={{alignContent: 'center', fontSize: 43}}>hello</Text>
-                <Text style={{alignContent: 'center', fontSize: 43}}>hello</Text>
-                <Text style={{alignContent: 'center', fontSize: 43}}>hello</Text>
+      <Text style={{ fontSize: 30, fontWeight: 'bold', color: themeColors.textNeutral,marginBottom: 15,marginStart: 16 }}>PostBox</Text>
+      <ScrollView horizontal={true} >
+      
+      <View style={{backgroundColor: 'white', height: 170,width: width*0.8, marginStart: 30, borderRadius: 30, marginBottom: 25}}>
+      <View className={'flex-row items-center'}>
+      <Image  
+        source={require('../assets/logos/mobilon.png')}
+        style={{
+          marginHorizontal: 20,
+          marginTop: 20,
+          width:50,
+          height:50,
+          borderRadius: 60,
+          borderWidth: 1,
+          borderColor: 'black',
+          backgroundColor: 'white'}}>
+      </Image>
+      <Text style={{fontSize: 15, fontWeight: 'bold'}}>Mobilon</Text>
+      </View>
+
+      <Text style={{marginHorizontal: 20, marginTop: 20}} numberOfLines={2}>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam
+      </Text>
+       
+    </View>
+
+    <View style={{backgroundColor: 'white', height: 170,width: width*0.8, marginHorizontal: 30, borderRadius: 30, marginBottom: 25}}>
+      <View className={'flex-row items-center'}>
+      <Image  
+        source={require('../assets/logos/GDSC.png')}
+        style={{
+          marginHorizontal: 20,
+          marginTop: 20,
+          width:50,
+          height:50,
+          borderRadius: 60,
+          borderWidth: 1,
+          borderColor: 'black',
+          backgroundColor: 'white'}}>
+      </Image>
+      <Text style={{fontSize: 15, fontWeight: 'bold'}}>Google Developer Student Club</Text>
+      </View>
+
+      <Text style={{marginHorizontal: 20, marginTop: 20}} numberOfLines={2}>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam
+      </Text>
+       
+    </View>
+    <View style={{backgroundColor: 'white', height: 170,width: width*0.85,marginEnd: 30, borderRadius: 30, marginBottom: 25}}>
+      <View className={'flex-row items-center'}>
+      <Image  
+        source={require('../assets/logos/wie.png')}
+        style={{
+          marginHorizontal: 20,
+          marginTop: 20,
+          width:50,
+          height:50,
+          borderRadius: 60,
+          borderWidth: 1,
+          borderColor: 'black',
+          backgroundColor: 'white'}}>
+      </Image>
+      <Text style={{fontSize: 15, fontWeight: 'bold'}}>IEEE-WIE</Text>
+      </View>
+
+      <Text style={{marginHorizontal: 20, marginTop: 20}} numberOfLines={2}>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam
+      </Text>
+       
+    </View>
+    </ScrollView>
+    
+    <View>
+      <Text style={{ fontSize: 30, fontWeight: 'bold', color: themeColors.textNeutral,marginBottom: 15,marginStart: 16 }}>Dean of SCSET</Text>
+    </View>
+                
     </View>          
     </ScrollView>
   );
@@ -242,6 +313,5 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
     borderRadius: 24,
     margin: 0,
-    marginBottom: 10,
   },
 });

@@ -49,8 +49,6 @@ const data = [
     text: 'Event Info',
     accent: '#012251',
   },
-  
-
 ];
 
 export default function App() {
