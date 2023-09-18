@@ -12,6 +12,7 @@ import {
   TouchableOpacity,
   Platform,
 } from 'react-native';
+import { Component } from "react";
 import { SafeAreaView } from 'react-native-safe-area-context';
 const { width, height } = Dimensions.get('window');
 import { getMovies } from '../api';
@@ -94,7 +95,8 @@ const Backdrop = ({ movies, scrollX }) => {
   );
 };
 
-export default function App() {
+
+export default function App () {
   const [movies, setMovies] = React.useState([]);
   const scrollX = React.useRef(new Animated.Value(0)).current;
   React.useEffect(() => {
@@ -113,6 +115,7 @@ export default function App() {
   if (movies.length === 0) {
     return <Loading />;
   }
+
 
   return (
     <ScrollView>
@@ -180,7 +183,25 @@ export default function App() {
                   {item.description}
                 </Text>
                 <Text style={{marginTop: 20}}>Date: {item.releaseDate}</Text>
+                <TouchableOpacity style={{bottom: -20,
+                        right: 70,position: 'absolute',}}>
+                {/* <Image 
+                      // Add the emoji animation effect when i click on this image
+                      source={require('../assets/logos/wie.png')}
+                      style={{
+                        width:30,
+                        height:30,
+                        borderRadius: 60,
+                        // borderWidth: 3,
+                        // borderColor: item.accent,
+                        borderColor: 'black',
+                        backgroundColor: 'white',
+                      }}>
+              </Image> */}
+              </TouchableOpacity>
+              
               </Animated.View>
+              
         
             </View>
             
