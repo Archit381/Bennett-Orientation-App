@@ -1,55 +1,30 @@
-import { API_KEY } from '../Bennett-Orientation-App/config';
-const genres = {
-  12: 'Adventure',
-  14: 'Fantasy',
-  16: 'Animation',
-  18: 'Drama',
-  27: 'Horror',
-  28: 'Action',
-  35: 'Comedy',
-  36: 'History',
-  37: 'Western',
-  53: 'Thriller',
-  80: 'Crime',
-  99: 'Documentary',
-  878: 'Science Fiction',
-  9648: 'Mystery',
-  10402: 'Music',
-  10749: 'Romance',
-  10751: 'Family',
-  10752: 'War',
-  10770: 'TV Movie',
-};
+import axios from 'axios';
+import {Appwrite} from 'appwrite';
 
-const API_URL = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&sort_by=popularity.desc`;
-const getImagePath = (path) =>
-  `https://image.tmdb.org/t/p/w440_and_h660_face${path}`;
-const getBackdropPath = (path) =>
-  `https://image.tmdb.org/t/p/w370_and_h556_multi_faces${path}`;
+
+const API_ENDPOINT = 'https://cloud.appwrite.io/v1';
+const PROJECT_ID = '6506b95c5bb71620d8b7';
+const COLLECTION_ID = '650724f80dce0a237953';
 
 export const getMovies = async () => {
-  const { results } = await fetch(API_URL).then((x) => x.json());
-  const movies = results.map(
-    ({
-      id,
-      original_title,
-      poster_path,
-      backdrop_path,
-      vote_average,
-      overview,
-      release_date,
-      genre_ids,
-    }) => ({
-      key: String(id),
-      title: original_title,
-      poster: getImagePath(poster_path),
-      backdrop: getBackdropPath(backdrop_path),
-      rating: vote_average,
-      description: overview,
-      releaseDate: release_date,
-      genres: genre_ids.map((genre) => genres[genre]),
-    })
-  );
+  try {
+    const response = await axios.get(
+      `${API_ENDPOINT}/database/${PROJECT_ID}/collections/${COLLECTION_ID}/documents`
+    );
 
-  return movies;
+    if (response.data.documents) {
+      return response.data.documents.map((doc) => ({
+        key: doc.$id,
+        title: doc.original_title,
+        description: doc.overview,
+        poster: doc.poster_path,
+        backdrop: doc.backdrop_path,
+      }));
+    } else {
+      throw new Error('Error fetching movies: Response format invalid');
+    }
+  } catch (error) {
+    throw new Error(`Error fetching movies: ${error.message}`);
+  }
 };
+

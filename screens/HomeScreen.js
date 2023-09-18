@@ -1,4 +1,3 @@
-
 import * as React from 'react';
 import {
   StatusBar,
@@ -14,7 +13,6 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 const { width, height } = Dimensions.get('window');
-import { getMovies } from '../api';
 import { MapPinIcon } from 'react-native-heroicons/solid';
 import { themeColors } from '../theme';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -24,7 +22,7 @@ const SPACING = 10;
 const ITEM_SIZE = Platform.OS === 'ios' ? width * 0.72 : width * 0.74;
 const EMPTY_ITEM_SIZE = (width - ITEM_SIZE) / 2;
 const BACKDROP_HEIGHT = height * 0.65;
-const FRONTDROP_HEIGHT=height-BACKDROP_HEIGHT;
+const FRONTDROP_HEIGHT = height - BACKDROP_HEIGHT;
 const ios = Platform.OS == 'ios';
 
 const Loading = () => (
@@ -33,9 +31,33 @@ const Loading = () => (
   </View>
 );
 
+const hardcodedData = [
+  {
+    key: '1',
+    title: 'GDSC',
+    description: 'Description',
+    poster: 'dsfsdfsdfsd',
+    backdrop: 'sdfsdfsdfsdf',
+  },
+  {
+    key: '2',
+    title: 'WIE',
+    description: 'Description',
+    poster: 'fsdfsdfsdfdsfsd',
+    backdrop: 'fsdfsdfsdfdsfsd',
+  },
+  {
+    key: '3',
+    title: 'IEEE',
+    description: 'Description',
+    poster: 'fsdfsdfsdfdsfsd',
+    backdrop: 'fsdfsdfsdfdsfsd',
+  },
+];
+
 const Backdrop = ({ movies, scrollX }) => {
   return (
-    <View style={{ height: BACKDROP_HEIGHT, width,paddingTop:80, position: 'absolute' }}>
+    <View style={{ height: BACKDROP_HEIGHT, width, paddingTop: 80, position: 'absolute' }}>
       <FlatList
         data={movies.reverse()}
         keyExtractor={(item) => item.key + '-backdrop'}
@@ -86,104 +108,84 @@ const Backdrop = ({ movies, scrollX }) => {
 };
 
 export default function App() {
-  const [movies, setMovies] = React.useState([]);
+  const [movies] = React.useState([
+    { key: 'empty-left' },
+    ...hardcodedData,
+    { key: 'empty-right' },
+  ]);
   const scrollX = React.useRef(new Animated.Value(0)).current;
-  React.useEffect(() => {
-    const fetchData = async () => {
-      const movies = await getMovies();
-      // Add empty items to create fake space
-      // [empty_item, ...movies, empty_item]
-      setMovies([{ key: 'empty-left' }, ...movies, { key: 'empty-right' }]);
-    };
-
-    if (movies.length === 0) {
-      fetchData(movies);
-    }
-  }, [movies]);
-
-  if (movies.length === 0) {
-    return <Loading />;
-  }
 
   return (
     <ScrollView>
-    <View style={styles.container}>
+      <View style={styles.container}>
+        <Backdrop movies={movies} scrollX={scrollX} />
+        <StatusBar />
+        <Animated.FlatList
+          showsHorizontalScrollIndicator={false}
+          data={movies}
+          keyExtractor={(item) => item.key}
+          horizontal
+          bounces={false}
+          decelerationRate={Platform.OS === 'ios' ? 0 : 0.98}
+          renderToHardwareTextureAndroid
+          contentContainerStyle={{ alignItems: 'center' }}
+          snapToInterval={ITEM_SIZE}
+          snapToAlignment='start'
+          onScroll={Animated.event([{ nativeEvent: { contentOffset: { x: scrollX } } }], {
+            useNativeDriver: false,
+          })}
+          scrollEventThrottle={16}
+          renderItem={({ item, index }) => {
+            if (!item.poster) {
+              return <View style={{ width: EMPTY_ITEM_SIZE }} />;
+            }
 
-      <Backdrop movies={movies} scrollX={scrollX} />
-      <StatusBar/>
-      <Animated.FlatList
-        showsHorizontalScrollIndicator={false}
-        data={movies}
-        keyExtractor={(item) => item.key}
-        horizontal
-        bounces={false}
-        decelerationRate={Platform.OS === 'ios' ? 0 : 0.98}
-        renderToHardwareTextureAndroid
-        contentContainerStyle={{ alignItems: 'center' }}
-        snapToInterval={ITEM_SIZE}
-        snapToAlignment='start'
-        onScroll={Animated.event(
-          [{ nativeEvent: { contentOffset: { x: scrollX } } }],
-          { useNativeDriver: false }
-        )}
-        scrollEventThrottle={16}
-        renderItem={({ item, index }) => {
-          if (!item.poster) {
-            return <View style={{ width: EMPTY_ITEM_SIZE }} />;
-          }
+            const inputRange = [
+              (index - 2) * ITEM_SIZE,
+              (index - 1) * ITEM_SIZE,
+              index * ITEM_SIZE,
+            ];
 
-          const inputRange = [
-            (index - 2) * ITEM_SIZE,
-            (index - 1) * ITEM_SIZE,
-            index * ITEM_SIZE,
-          ];
+            const translateY = scrollX.interpolate({
+              inputRange,
+              outputRange: [100, 50, 100],
+              extrapolate: 'clamp',
+            });
 
-          const translateY = scrollX.interpolate({
-            inputRange,
-            outputRange: [100, 50, 100],
-            extrapolate: 'clamp',
-          });
+            return (
+              <View style={{ width: ITEM_SIZE }}>
+                <Animated.View
+                  style={{
+                    marginHorizontal: SPACING,
+                    padding: SPACING * 2,
+                    alignItems: 'center',
+                    transform: [{ translateY }],
+                    backgroundColor: 'white',
+                    marginBottom: 100,
 
-          return (
-            <View style={{ width: ITEM_SIZE }}>
-              <Animated.View
-                style={{
-                  marginHorizontal: SPACING,
-                  padding: SPACING * 2,
-                  alignItems: 'center',
-                  transform: [{ translateY }],
-                  backgroundColor: 'white',
-                  marginBottom: 100,
-              
-                  
-                  borderRadius: 34,
-                }}
-              >
-                <Image
-                  source={{ uri: item.poster }}
-                  style={styles.posterImage}
-                />
-                <Text style={{ fontSize: 24 }} numberOfLines={1}>
-                  {item.title}
-                </Text>
-                <Text style={{ fontSize: 12, marginTop: 15 }} numberOfLines={3}>
-                  {item.description}
-                </Text>
-              </Animated.View>
-        
-            </View>
-            
-          );
-        }}
-      />
-    </View>
-    
-    <View>
-                <Text style={{alignContent: 'center', fontSize: 43}}>hello</Text>
-                <Text style={{alignContent: 'center', fontSize: 43}}>hello</Text>
-                <Text style={{alignContent: 'center', fontSize: 43}}>hello</Text>
-                <Text style={{alignContent: 'center', fontSize: 43}}>hello</Text>
-    </View>          
+                    borderRadius: 34,
+                  }}
+                >
+                  <Image source={{ uri: item.poster }} style={styles.posterImage} />
+                  <Text style={{ fontSize: 24 }} numberOfLines={1}>
+                    {item.title}
+                  </Text>
+                  <Text style={{ fontSize: 12, marginTop: 15 }} numberOfLines={3}>
+                    {item.description}
+                  </Text>
+                </Animated.View>
+              </View>
+            );
+          }}
+        />
+      </View>
+
+      <View>
+        <Text style={{ alignContent: 'center', fontSize: 43 }}>hello</Text>
+        <Text style={{ alignContent: 'center', fontSize: 43 }}>hello</Text>
+        <Text style={{ alignContent: 'center', fontSize: 43 }}>hello</Text>
+        <Text style={{ alignContent: 'center', fontSize: 43 }}>hello</Text>
+      </View>
     </ScrollView>
   );
 }
@@ -196,7 +198,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 0,
-    height:height,
+    height: height,
   },
   paragraph: {
     margin: 24,
