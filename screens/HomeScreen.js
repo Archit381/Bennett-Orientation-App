@@ -36,10 +36,33 @@ const Loading = () => (
   </View>
 );
 
+const hardcodedData = [
+  {
+    key: '1',
+    title: 'GDSC',
+    description: 'Description',
+    poster: 'https://i.postimg.cc/7Gxz6p6s/gdsc.jpg',
+    backdrop: 'https://i.postimg.cc/C1Vgf0G2/21.png',
+  },
+  {
+    key: '2',
+    title: 'CSI',
+    description: 'Description',
+    poster: 'https://i.postimg.cc/WdkgfGCn/csi.jpg',
+    backdrop: 'https://i.postimg.cc/MHBDhkMy/24.png',
+  },
+  {
+    key: '3',
+    title: 'IBF',
+    description: 'Description',
+    poster: 'https://i.postimg.cc/vg3V63xQ/ibf.jpg',
+    backdrop: 'https://i.postimg.cc/5t8wm5zt/19.png',
+  },
+];
+
 const Backdrop = ({ movies, scrollX }) => {
   return (
-    <View style={{ height: BACKDROP_HEIGHT, width:width, position: 'absolute' }}>
-      
+    <View style={{ height: BACKDROP_HEIGHT, width, position: 'absolute' }}>
       <FlatList
         data={movies.reverse()}
         keyExtractor={(item) => item.key + '-backdrop'}
@@ -55,7 +78,6 @@ const Backdrop = ({ movies, scrollX }) => {
             // extrapolate:'clamp'
           });
           return (
-            
             <Animated.View
               removeClippedSubviews={false}
               style={{
@@ -65,7 +87,6 @@ const Backdrop = ({ movies, scrollX }) => {
                 overflow: 'hidden',
               }}
             >
-              
               <Image
                 source={{ uri: item.backdrop }}
                 style={{
@@ -74,11 +95,11 @@ const Backdrop = ({ movies, scrollX }) => {
                   position: 'absolute',
                 }}
               />
-              
             </Animated.View>
           );
         }}
       />
+
       <View className={'flex-row'} style={{marginTop: 45, position: 'absolute',paddingHorizontal: 15,backgroundColor: 'rgba(255,255,255,0.9)',borderRadius: 50, alignSelf: 'center' }}>
         <Image source={require('../logo1.png')} className={'h-9 w-9 p-1'} style={{marginVertical: 5}}/>
         <Text style={{ alignSelf: 'center',padding: 9, fontSize: 20, fontWeight: 'bold', color: 'black'}}>Upcoming Events</Text>
@@ -97,120 +118,79 @@ const Backdrop = ({ movies, scrollX }) => {
   );
 };
 
-
-export default function App () {
-  const [movies, setMovies] = React.useState([]);
+export default function App() {
+  const [movies] = React.useState([
+    { key: 'empty-left' },
+    ...hardcodedData,
+    { key: 'empty-right' },
+  ]);
   const scrollX = React.useRef(new Animated.Value(0)).current;
-  React.useEffect(() => {
-    const fetchData = async () => {
-      const movies = await getMovies();
-      // Add empty items to create fake space
-      // [empty_item, ...movies, empty_item]
-      setMovies([{ key: 'empty-left' }, ...movies, { key: 'empty-right' }]);
-    };
-
-    if (movies.length === 0) {
-      fetchData(movies);
-    }
-  }, [movies]);
-
-  if (movies.length === 0) {
-    return <Loading />;
-  }
-
 
   return (
     <ScrollView>
-      
-    <View style={styles.container}>
-    <SafeAreaView style={{ marginBottom: -8 }}>
-        
-    </SafeAreaView>    
-      <Backdrop movies={movies} scrollX={scrollX} />
-      <Animated.FlatList
-        showsHorizontalScrollIndicator={false}
-        data={movies}
-        keyExtractor={(item) => item.key}
-        horizontal
-        bounces={false}
-        decelerationRate={Platform.OS === 'ios' ? 0 : 0.98}
-        renderToHardwareTextureAndroid
-        contentContainerStyle={{ alignItems: 'center' }}
-        snapToInterval={ITEM_SIZE}
-        snapToAlignment='start'
-        onScroll={Animated.event(
-          [{ nativeEvent: { contentOffset: { x: scrollX } } }],
-          { useNativeDriver: false }
-        )}
-        scrollEventThrottle={16}
-        renderItem={({ item, index }) => {
-          if (!item.poster) {
-            return <View style={{ width: EMPTY_ITEM_SIZE }} />;
-          }
+      <View style={styles.container}>
+        <Backdrop movies={movies} scrollX={scrollX} />
+        <StatusBar />
+        <Animated.FlatList
+          showsHorizontalScrollIndicator={false}
+          data={movies}
+          keyExtractor={(item) => item.key}
+          horizontal
+          bounces={false}
+          decelerationRate={Platform.OS === 'ios' ? 0 : 0.98}
+          renderToHardwareTextureAndroid
+          contentContainerStyle={{ alignItems: 'center' }}
+          snapToInterval={ITEM_SIZE}
+          snapToAlignment='start'
+          onScroll={Animated.event([{ nativeEvent: { contentOffset: { x: scrollX } } }], {
+            useNativeDriver: false,
+          })}
+          scrollEventThrottle={16}
+          renderItem={({ item, index }) => {
+            if (!item.poster) {
+              return <View style={{ width: EMPTY_ITEM_SIZE }} />;
+            }
 
-          const inputRange = [
-            (index - 2) * ITEM_SIZE,
-            (index - 1) * ITEM_SIZE,
-            index * ITEM_SIZE,
-          ];
+            const inputRange = [
+              (index - 2) * ITEM_SIZE,
+              (index - 1) * ITEM_SIZE,
+              index * ITEM_SIZE,
+            ];
 
-          const translateY = scrollX.interpolate({
-            inputRange,
-            outputRange: [100, 50, 100],
-            extrapolate: 'clamp',
-          });
+            const translateY = scrollX.interpolate({
+              inputRange,
+              outputRange: [100, 50, 100],
+              extrapolate: 'clamp',
+            });
 
-          return (
-            <View style={{ width: ITEM_SIZE }}>
-              <Animated.View
-                style={{
-                  marginHorizontal: SPACING,
-                  padding: SPACING * 2,
-                  alignItems: 'center',
-                  transform: [{ translateY }],
-                  backgroundColor: 'white',
-                  marginBottom:90,
-                  borderRadius: 34,
-                }}
-              >
-                <Image
-                  source={{ uri: item.poster }}
-                  style={styles.posterImage}
-                />
-                
-                <Text style={{ fontSize: 20, marginTop: 10 }} numberOfLines={1}>
-                  {item.title}
-                </Text>
-                <Text style={{ fontSize: 12, marginTop: 15, marginBottom: 30 }} numberOfLines={3}>
-                  {item.description}
-                </Text>
-                <Text style={{marginTop: 20}}>Date: {item.releaseDate}</Text>
-                {/* <TouchableOpacity style={{bottom: -20,
-                        right: 30,position: 'absolute',}}>
-                <Image 
-                      
-                      source={require('../assets/logos/wie.png')}
-                      style={{
-                        width:50,
-                        height:50,
-                        borderRadius: 60,
-                        borderWidth: 1,
-                        borderColor: item.accent,
-                        borderColor: 'black',
-                        backgroundColor: 'white',
-                      }}>
-              </Image>
-              </TouchableOpacity> */}
-              
-              </Animated.View>
-              
-        
-            </View>
-            
-          );
-        }}
-      />
-    </View>
+            return (
+              <View style={{ width: ITEM_SIZE }}>
+                <Animated.View
+                  style={{
+                    marginHorizontal: SPACING,
+                    padding: SPACING * 2,
+                    alignItems: 'center',
+                    transform: [{ translateY }],
+                    backgroundColor: 'white',
+                    marginBottom: 80,
+
+                    borderRadius: 34,
+                  }}
+                >
+                  <Image source={{ uri: item.poster }} style={styles.posterImage} />
+                  <Text style={{ fontSize: 24 }} numberOfLines={1}>
+                    {item.title}
+                  </Text>
+                  <Text style={{ fontSize: 12, marginTop: 15 }} numberOfLines={3}>
+                    {item.description}
+                  </Text>
+                </Animated.View>
+              </View>
+            );
+          }}
+        />
+      </View>
+
     
     <View>
       <Text style={{ fontSize: 30, fontWeight: 'bold', color: themeColors.textNeutral,marginBottom: 15,marginStart: 16 }}>PostBox</Text>
