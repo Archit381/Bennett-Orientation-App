@@ -1,1 +1,0 @@
-{"id": "1", "poster_image": "ggsgfsrgesrr", "cover_image": "sergsergresrges", "event_name": "ersgsergesrgesrgesr", "event_description": "sergsergsergsergesr", "event_date": "2023-09-15", "club_name": "GDSC", "club_post": "rtesrtertsertsrtsre"}

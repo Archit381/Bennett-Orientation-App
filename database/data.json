@@ -1,0 +1,22 @@
+[
+    {
+        "id": "1",
+        "poster_image": "https://instagram.fdel72-1.fna.fbcdn.net/v/t51.2885-15/377263021_331984496000541_2030354148840462498_n.heic?stp=dst-jpg_e35&_nc_ht=instagram.fdel72-1.fna.fbcdn.net&_nc_cat=109&_nc_ohc=pm3dcF5t_A8AX9tvEGa&edm=ACWDqb8BAAAA&ccb=7-5&ig_cache_key=MzE5MDM1NTk0NTMxODIxNjM4NA%3D%3D.2-ccb7-5&oh=00_AfCnQEgDub4I6gpXPhEytHWLJa3_hSuYW-Qg_ewgurqfcQ&oe=650BDC35&_nc_sid=ee9879",
+        "cover_image": "https://instagram.fdel72-1.fna.fbcdn.net/v/t51.2885-19/376009444_789430382866622_4282349291143809607_n.jpg?stp=dst-jpg_s320x320&_nc_ht=instagram.fdel72-1.fna.fbcdn.net&_nc_cat=102&_nc_ohc=bPTJ45VDcP0AX-mMuX9&edm=AOQ1c0wBAAAA&ccb=7-5&oh=00_AfCiIvRfvVVdVgG80vGJqsjnx_W3xUhrUD-AEJoJxTQGJw&oe=650E93F9&_nc_sid=8b3546",
+        "event_name": "Info Session",
+        "event_description": "Onbording of the Offical Google Student Developer Club",
+        "event_date": "2023-09-15",
+        "club_name": "GDSC",
+        "club_post": "abc"
+    },
+    {
+        "id": "2", 
+        "poster_image": "https://i.ibb.co/q5Vy13Q/acm-poster.png",
+        "cover_image": "https://instagram.fdel72-1.fna.fbcdn.net/v/t51.2885-19/310432891_432913608945761_4105454506123452728_n.jpg?stp=dst-jpg_s320x320&_nc_ht=instagram.fdel72-1.fna.fbcdn.net&_nc_cat=105&_nc_ohc=WhxQVsvLm9gAX8IYTvl&edm=AOQ1c0wBAAAA&ccb=7-5&oh=00_AfAaqJF6ifoiSq6YGHIn1_eY5aWIWSZSOOoOnToquWcXDQ&oe=650CEEF8&_nc_sid=8b3546",
+        "event_name": "What's Next?",
+        "event_description": "An introduction to ACM and the world of Research!",
+        "event_date": "2023-09-19",
+        "club_name": "ACM",
+        "club_post": "xyz"
+    }
+]
