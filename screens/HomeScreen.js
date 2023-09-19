@@ -10,6 +10,7 @@ const SPACING = 10;
 const ITEM_SIZE = Platform.OS === 'ios' ? width * 0.72 : width * 0.74;
 const EMPTY_ITEM_SIZE = (width - ITEM_SIZE) / 2;
 const BACKDROP_HEIGHT = height * 0.65;
+const ios = Platform.OS == 'ios';
 
 const Loading = () => (
   <View style={styles.loadingContainer}>
@@ -19,7 +20,7 @@ const Loading = () => (
 
 const Backdrop = ({ movies, scrollX }) => {
   return (
-    <View style={{ height: BACKDROP_HEIGHT, width, paddingTop: 80, position: 'absolute' }}>
+    <View style={{ height: BACKDROP_HEIGHT, width, position: 'absolute' }}>
       <FlatList
         data={movies.reverse()}
         keyExtractor={(item) => item.key + '-backdrop'}
