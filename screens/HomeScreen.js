@@ -20,7 +20,7 @@ import { MapPinIcon } from 'react-native-heroicons/solid';
 import { themeColors } from '../theme';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ScrollView } from 'react-native-gesture-handler';
-import { Bold } from 'react-native-feather';
+
 
 const SPACING = 10;
 const ITEM_SIZE = Platform.OS === 'ios' ? width * 0.72 : width * 0.74;
@@ -43,13 +43,15 @@ const hardcodedData = [
     description: 'Description',
     poster: 'https://i.postimg.cc/7Gxz6p6s/gdsc.jpg',
     backdrop: 'https://i.postimg.cc/C1Vgf0G2/21.png',
+    release_date: '20 September 2023',
   },
   {
     key: '2',
     title: 'CSI',
-    description: 'Description',
+    description: 'Description', 
     poster: 'https://i.postimg.cc/WdkgfGCn/csi.jpg',
     backdrop: 'https://i.postimg.cc/MHBDhkMy/24.png',
+    release_date: '22 September 2023',
   },
   {
     key: '3',
@@ -57,6 +59,7 @@ const hardcodedData = [
     description: 'Description',
     poster: 'https://i.postimg.cc/vg3V63xQ/ibf.jpg',
     backdrop: 'https://i.postimg.cc/5t8wm5zt/19.png',
+    release_date: '25 September 2023',
   },
 ];
 
@@ -130,7 +133,6 @@ export default function App() {
     <ScrollView>
       <View style={styles.container}>
         <Backdrop movies={movies} scrollX={scrollX} />
-        <StatusBar />
         <Animated.FlatList
           showsHorizontalScrollIndicator={false}
           data={movies}
@@ -178,12 +180,13 @@ export default function App() {
                   }}
                 >
                   <Image source={{ uri: item.poster }} style={styles.posterImage} />
-                  <Text style={{ fontSize: 24 }} numberOfLines={1}>
+                  <Text style={{ fontSize: 24,marginTop: 20 }} numberOfLines={1}>
                     {item.title}
                   </Text>
                   <Text style={{ fontSize: 12, marginTop: 15 }} numberOfLines={3}>
                     {item.description}
                   </Text>
+                  
                 </Animated.View>
               </View>
             );
@@ -194,78 +197,54 @@ export default function App() {
     
     <View>
       <Text style={{ fontSize: 30, fontWeight: 'bold', color: themeColors.textNeutral,marginBottom: 15,marginStart: 16 }}>PostBox</Text>
-      <ScrollView horizontal={true} >
+      <FlatList
+        data={hardcodedData}
+        keyExtractor={item=> item.key}
+        horizontal={true}
+        renderItem={({ item }) => 
+        <View style={{backgroundColor: 'white', height: 170,width: width*0.8, marginStart: 30, borderRadius: 30, marginBottom: 25}}>
+        <View className={'flex-row items-center'}>
+        <Image  
+          source={require('../assets/logos/mobilon.png')}
+          style={{
+            marginHorizontal: 20,
+            marginTop: 20,
+            width:50,
+            height:50,
+            borderRadius: 60,
+            borderWidth: 1,
+            borderColor: 'black',
+            backgroundColor: 'white'}}>
+        </Image>
+        <Text style={{fontSize: 15, fontWeight: 'bold'}}>{item.title}</Text>
+        </View>
+  
+        <Text style={{marginHorizontal: 20, marginTop: 20}} numberOfLines={2}>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam
+        </Text>
+         
+      </View>
+        }>
+
+      </FlatList>
       
-      <View style={{backgroundColor: 'white', height: 170,width: width*0.8, marginStart: 30, borderRadius: 30, marginBottom: 25}}>
-      <View className={'flex-row items-center'}>
-      <Image  
-        source={require('../assets/logos/mobilon.png')}
-        style={{
-          marginHorizontal: 20,
-          marginTop: 20,
-          width:50,
-          height:50,
-          borderRadius: 60,
-          borderWidth: 1,
-          borderColor: 'black',
-          backgroundColor: 'white'}}>
-      </Image>
-      <Text style={{fontSize: 15, fontWeight: 'bold'}}>Mobilon</Text>
-      </View>
-
-      <Text style={{marginHorizontal: 20, marginTop: 20}} numberOfLines={2}>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam
-      </Text>
-       
-    </View>
-
-    <View style={{backgroundColor: 'white', height: 170,width: width*0.8, marginHorizontal: 30, borderRadius: 30, marginBottom: 25}}>
-      <View className={'flex-row items-center'}>
-      <Image  
-        source={require('../assets/logos/GDSC.png')}
-        style={{
-          marginHorizontal: 20,
-          marginTop: 20,
-          width:50,
-          height:50,
-          borderRadius: 60,
-          borderWidth: 1,
-          borderColor: 'black',
-          backgroundColor: 'white'}}>
-      </Image>
-      <Text style={{fontSize: 15, fontWeight: 'bold'}}>Google Developer Student Club</Text>
-      </View>
-
-      <Text style={{marginHorizontal: 20, marginTop: 20}} numberOfLines={2}>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam
-      </Text>
-       
-    </View>
-    <View style={{backgroundColor: 'white', height: 170,width: width*0.85,marginEnd: 30, borderRadius: 30, marginBottom: 25}}>
-      <View className={'flex-row items-center'}>
-      <Image  
-        source={require('../assets/logos/wie.png')}
-        style={{
-          marginHorizontal: 20,
-          marginTop: 20,
-          width:50,
-          height:50,
-          borderRadius: 60,
-          borderWidth: 1,
-          borderColor: 'black',
-          backgroundColor: 'white'}}>
-      </Image>
-      <Text style={{fontSize: 15, fontWeight: 'bold'}}>IEEE-WIE</Text>
-      </View>
-
-      <Text style={{marginHorizontal: 20, marginTop: 20}} numberOfLines={2}>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam
-      </Text>
-       
-    </View>
-    </ScrollView>
-    
     <View>
       <Text style={{ fontSize: 30, fontWeight: 'bold', color: themeColors.textNeutral,marginBottom: 15,marginStart: 16 }}>Dean of SCSET</Text>
     </View>
-                
+    
+    <View style={{alignItems: 'center', marginBottom : 30}}>
+      <Image source={require('../assets/dean2.webp')} style={{height: 150, width: 150,borderRadius: 20}}></Image>
+      <Text style={{marginTop: 10, fontWeight: 'bold', fontSize: 15}}>Prof. (Dr.) Abhay Bansal</Text> 
+    </View>
+    
+    <View className={'flex-row'}>
+    <View style={{backgroundColor: 'white', height: 200,width: width*0.40,marginHorizontal: 20, borderRadius: 30, marginBottom: 25}}>
+      <View className={'flex-row items-center'}></View>
+    </View>
+    <View style={{backgroundColor: 'white', height: 200,width: width*0.4,marginHorizontal: 20, borderRadius: 30, marginBottom: 25}}>
+      <View className={'flex-row items-center'}></View>
+    </View>
+    </View>      
+
     </View>          
     </ScrollView>
   );
