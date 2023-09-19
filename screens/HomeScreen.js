@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Image, Dimensions, Animated, ScrollView, FlatLi
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import axios from 'axios';
+import { themeColors } from '../theme';
 import { LinearGradient } from 'expo-linear-gradient';
 
 const { width, height } = Dimensions.get('window');
@@ -17,6 +18,32 @@ const Loading = () => (
     <Text style={styles.paragraph}>Loading...</Text>
   </View>
 );
+const hardcodedData = [
+  {
+    key: '1',
+    title: 'GDSC',
+    description: 'Description',
+    poster: 'https://i.postimg.cc/7Gxz6p6s/gdsc.jpg',
+    backdrop: 'https://i.postimg.cc/C1Vgf0G2/21.png',
+    release_date: '20 September 2023',
+  },
+  {
+    key: '2',
+    title: 'CSI',
+    description: 'Description', 
+    poster: 'https://i.postimg.cc/WdkgfGCn/csi.jpg',
+    backdrop: 'https://i.postimg.cc/MHBDhkMy/24.png',
+    release_date: '22 September 2023',
+  },
+  {
+    key: '3',
+    title: 'IBF',
+    description: 'Description',
+    poster: 'https://i.postimg.cc/vg3V63xQ/ibf.jpg',
+    backdrop: 'https://i.postimg.cc/5t8wm5zt/19.png',
+    release_date: '25 September 2023',
+  },
+];
 
 const Backdrop = ({ movies, scrollX }) => {
   return (
@@ -57,6 +84,10 @@ const Backdrop = ({ movies, scrollX }) => {
           );
         }}
       />
+      <View className={'flex-row'} style={{marginTop: 45, position: 'absolute',paddingHorizontal: 15,backgroundColor: 'rgba(255,255,255,0.9)',borderRadius: 50, alignSelf: 'center' }}>
+        <Image source={require('../assets/logos/bennett_logo.png')} className={'h-9 w-9 p-1'} style={{marginVertical: 5}}/>
+        <Text style={{ alignSelf: 'center',padding: 9, fontSize: 20, fontWeight: 'bold', color: 'black'}}>Upcoming Events</Text>
+      </View>
       <LinearGradient
         colors={['rgba(0, 0, 0, 0)', 'white']}
         style={{
@@ -121,17 +152,18 @@ export default function App() {
             alignItems: 'center',
             transform: [{ translateY }],
             backgroundColor: 'white',
-            marginBottom: 100,
+            marginBottom: 80,
             borderRadius: 34,
+
           }}
         >
           <Image source={{ uri: item.poster }} style={styles.posterImage} />
-          <Text style={{ fontSize: 24 }} numberOfLines={1}>
-            {item.title}
-          </Text>
-          <Text style={{ fontSize: 12, marginTop: 15 }} numberOfLines={3}>
-            {item.description}
-          </Text>
+              <Text style={{ fontSize: 24,marginTop: 20 }} numberOfLines={1}>
+                    {item.title}
+              </Text>
+              <Text style={{ fontSize: 12, marginTop: 15 }} numberOfLines={3}>
+                    {item.description}
+              </Text>
         </Animated.View>
       </View>
     );
@@ -162,11 +194,56 @@ export default function App() {
       </View>
 
       <View>
-        <Text style={{ alignContent: 'center', fontSize: 43 }}>hello</Text>
-        <Text style={{ alignContent: 'center', fontSize: 43 }}>hello</Text>
-        <Text style={{ alignContent: 'center', fontSize: 43 }}>hello</Text>
-        <Text style={{ alignContent: 'center', fontSize: 43 }}>hello</Text>
+      <Text style={{ fontSize: 30, fontWeight: 'bold', color: themeColors.textNeutral,marginBottom: 15,marginStart: 16 }}>PostBox</Text>
+      <FlatList
+        data={hardcodedData}
+        keyExtractor={item=> item.key}
+        horizontal={true}
+        renderItem={({ item }) => 
+        <View style={{backgroundColor: 'white', height: 170,width: width*0.8, marginStart: 30, borderRadius: 30, marginBottom: 25}}>
+        <View className={'flex-row items-center'}>
+        <Image  
+          source={require('../assets/logos/mobilon.png')}
+          style={{
+            marginHorizontal: 20,
+            marginTop: 20,
+            width:50,
+            height:50,
+            borderRadius: 60,
+            borderWidth: 1,
+            borderColor: 'black',
+            backgroundColor: 'white'}}>
+        </Image>
+        <Text style={{fontSize: 15, fontWeight: 'bold'}}>{item.title}</Text>
+        </View>
+  
+        <Text style={{marginHorizontal: 20, marginTop: 20}} numberOfLines={2}>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam
+        </Text>
+         
       </View>
+        }>
+
+      </FlatList>
+      
+    <View>
+      <Text style={{ fontSize: 30, fontWeight: 'bold', color: themeColors.textNeutral,marginBottom: 15,marginStart: 16 }}>Dean of SCSET</Text>
+    </View>
+    
+    <View style={{alignItems: 'center', marginBottom : 30}}>
+      <Image source={require('../assets/dean_pic.webp')} style={{height: 150, width: 150,borderRadius: 20}}></Image>
+      <Text style={{marginTop: 10, fontWeight: 'bold', fontSize: 15}}>Prof. (Dr.) Abhay Bansal</Text> 
+    </View>
+    
+    <View className={'flex-row'}>
+    <View style={{backgroundColor: 'white', height: 200,width: width*0.40,marginHorizontal: 20, borderRadius: 30, marginBottom: 25}}>
+      <View className={'flex-row items-center'}></View>
+    </View>
+    <View style={{backgroundColor: 'white', height: 200,width: width*0.4,marginHorizontal: 20, borderRadius: 30, marginBottom: 25}}>
+      <View className={'flex-row items-center'}></View>
+    </View>
+    </View>      
+
+    </View> 
     </ScrollView>
   );
 }
