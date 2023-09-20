@@ -106,7 +106,7 @@ export default function App() {
   const scrollX = React.useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
-    axios.get('http://10.0.2.2:5000/get_data')
+    axios.get('http://127.0.0.1:5000/get_data')
       .then(response => {
         if (response.data && Array.isArray(response.data)) {
           const eventData = response.data.map((event, index) => ({

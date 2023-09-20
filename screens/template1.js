@@ -1,188 +1,280 @@
+/**
+ *
+ * Inspiration: https://dribbble.com/shots/3731362-Event-cards-iOS-interaction
+ */
+
 import * as React from 'react';
 import {
-  Animated,
-  Dimensions,
+  StatusBar,
   Image,
   FlatList,
-  Text,  
+  Dimensions,
+  Animated,
+  Text,
   View,
-  TouchableOpacity,
   StyleSheet,
-  Linking,
-  ImageBackground,
+  SafeAreaView,
 } from 'react-native';
+const { width } = Dimensions.get('screen');
+import { EvilIcons } from '@expo/vector-icons';
+import {
+  FlingGestureHandler,
+  Directions,
+  State,
+} from 'react-native-gesture-handler';
+import { gestureHandlerRootHOC } from 'react-native-gesture-handler';
 
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { StatusBar } from 'expo-status-bar';
-import { themeColors } from '../theme';
-import { useNavigation } from '@react-navigation/native'
-import { ArrowLeftCircleIcon} from 'react-native-heroicons/outline';
-
-const { width, height } = Dimensions.get('screen');
-const ITEM_WIDTH = width * 0.86;
-
-const ITEM_HEIGHT = ITEM_WIDTH * 1.47;
-const ios = Platform.OS == 'ios';
-
-const data = [
+// https://www.creative-flyers.com
+const DATA = [
   {
-    logo: require('../assets/logos/GDSC.png'),
-    photo: require('../assets/gdsc.jpg'),
-    text: 'Event Info',
-    accent: '#f4db7b',
+    title: 'Afro vibes',
+    location: 'Mumbai, India',
+    date: 'Nov 17th, 2020',
+    poster:
+      'https://www.creative-flyers.com/wp-content/uploads/2020/07/Afro-vibes-flyer-template.jpg',
   },
   {
-    logo: require('../assets/logos/CSI.png'),
-    photo: require('../assets/csi.jpg'),
-    text: "Event Info",
-    accent: '#183883',
+    title: 'Jungle Party',
+    location: 'Unknown',
+    date: 'Sept 3rd, 2020',
+    poster:
+      'https://www.creative-flyers.com/wp-content/uploads/2019/11/Jungle-Party-Flyer-Template-1.jpg',
   },
   {
-    logo: require('../assets/logos/wie.png'),
-    photo: require('../assets/wie.jpg'),
-    text: 'Event Info',
-    accent: '#75308b',
+    title: '4th Of July',
+    location: 'New York, USA',
+    date: 'Oct 11th, 2020',
+    poster:
+      'https://www.creative-flyers.com/wp-content/uploads/2020/06/4th-Of-July-Invitation.jpg',
   },
   {
-    logo: require('../assets/logos/ibf.png'),
-    photo: require('../assets/ibf.jpg'),
-    text: 'Event Info',
-    accent: '#012251',
+    title: 'Summer festival',
+    location: 'Bucharest, Romania',
+    date: 'Aug 17th, 2020',
+    poster:
+      'https://www.creative-flyers.com/wp-content/uploads/2020/07/Summer-Music-Festival-Poster.jpg',
   },
-  
-
+  {
+    title: 'BBQ with friends',
+    location: 'Prague, Czech Republic',
+    date: 'Sept 11th, 2020',
+    poster:
+      'https://www.creative-flyers.com/wp-content/uploads/2020/06/BBQ-Flyer-Psd-Template.jpg',
+  },
+  {
+    title: 'Festival music',
+    location: 'Berlin, Germany',
+    date: 'Apr 21th, 2021',
+    poster:
+      'https://www.creative-flyers.com/wp-content/uploads/2020/06/Festival-Music-PSD-Template.jpg',
+  },
+  {
+    title: 'Beach House',
+    location: 'Liboa, Portugal',
+    date: 'Aug 12th, 2020',
+    poster:
+      'https://www.creative-flyers.com/wp-content/uploads/2020/06/Summer-Beach-House-Flyer.jpg',
+  },
 ];
 
-export default function App() {
-  const scrollY = React.useRef(new Animated.Value(1)).current;
-  const scrollX = React.useRef(new Animated.Value(0)).current; 
+const OVERFLOW_HEIGHT = 70;
+const SPACING = 10;
+const ITEM_WIDTH = width * 0.76;
+const ITEM_HEIGHT = ITEM_WIDTH * 1.7;
+const VISIBLE_ITEMS = 3;
+
+const OverflowItems = ({ data, scrollXAnimated }) => {
+  const inputRange = [-1, 0, 1];
+  const translateY = scrollXAnimated.interpolate({
+    inputRange,
+    outputRange: [OVERFLOW_HEIGHT, 0, -OVERFLOW_HEIGHT],
+  });
+  return (
+    <View style={styles.overflowContainer}>
+      <Animated.View style={{ transform: [{ translateY }] }}>
+        {data.map((item, index) => {
+          return (
+            <View key={index} style={styles.itemContainer}>
+              <Text style={[styles.title]} numberOfLines={1}>
+                {item.title}
+              </Text>
+              <View style={styles.itemContainerRow}>
+                <Text style={[styles.location]}>
+                  <EvilIcons
+                    name='location'
+                    size={16}
+                    color='black'
+                    style={{ marginRight: 5 }}
+                  />
+                  {item.location}
+                </Text>
+                <Text style={[styles.date]}>{item.date}</Text>
+              </View>
+            </View>
+          );
+        })}
+      </Animated.View>
+    </View>
+  );
+};
+
+export default gestureHandlerRootHOC(function App() {
+  const [data, setData] = React.useState(DATA);
+  const scrollXIndex = React.useRef(new Animated.Value(0)).current;
+  const scrollXAnimated = React.useRef(new Animated.Value(0)).current;
+  const [index, setIndex] = React.useState(0);
+  const setActiveIndex = React.useCallback((activeIndex) => {
+    scrollXIndex.setValue(activeIndex);
+    setIndex(activeIndex);
+  });
+
+  React.useEffect(() => {
+    if (index === data.length - VISIBLE_ITEMS - 1) {
+      // get new data
+      // fetch more data
+      const newData = [...data, ...data];
+      setData(newData);
+    }
+  });
+
+  React.useEffect(() => {
+    Animated.spring(scrollXAnimated, {
+      toValue: scrollXIndex,
+      useNativeDriver: true,
+    }).start();
+  });
 
   return (
-    <View style={styles.container}>
-      <StatusBar />
-      <SafeAreaView style={ios ? { marginBottom: -8 } : {}}>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            paddingHorizontal: 16,
-            paddingTop: 15,
-            backgroundColor: 'white',
-          }}
-        >
-          <Text style={{ fontSize: 35, fontWeight: 'bold', color: 'black' }}>
-            Upcoming Events
-          </Text>
-          <TouchableOpacity className=" rounded-full " onPress={()=> navigation.goBack()}>
-            <ArrowLeftCircleIcon size="50" strokeWidth={1.2} color="black" />
-          </TouchableOpacity>
-        </View>
-        <Animated.FlatList
-          data={data}
-          keyExtractor={(item) => item.key}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          pagingEnabled
-          backgroundColor='white'
-          onScroll={Animated.event(
-            [{ nativeEvent: { contentOffset: { x: scrollX } } }],
-            { useNativeDriver: true }
-          )}
-          renderItem={({ item, index }) => {
-            const inputRange = [
-              (index - 1) * width,
-              index * width,
-              (index + 1) * width,
-            ];
-            const translateX = scrollX.interpolate({
-              inputRange,
-              outputRange: [-width * 0.7, 0, width * 0.7],
-            });
-            return (
-              <View style={{ width, justifyContent: 'center', alignItems: 'center' }}>
-                <View
+    <FlingGestureHandler
+      key='left'
+      direction={Directions.LEFT}
+      onHandlerStateChange={(ev) => {
+        if (ev.nativeEvent.state === State.END) {
+          if (index === data.length - 1) {
+            return;
+          }
+          setActiveIndex(index + 1);
+        }
+      }}
+    >
+      <FlingGestureHandler
+        key='right'
+        direction={Directions.RIGHT}
+        onHandlerStateChange={(ev) => {
+          if (ev.nativeEvent.state === State.END) {
+            if (index === 0) {
+              return;
+            }
+            setActiveIndex(index - 1);
+          }
+        }}
+      >
+        <SafeAreaView style={styles.container}>
+          <StatusBar hidden />
+          <OverflowItems data={data} scrollXAnimated={scrollXAnimated} />
+          <FlatList
+            data={data}
+            keyExtractor={(_, index) => String(index)}
+            horizontal
+            inverted
+            contentContainerStyle={{
+              flex: 1,
+              justifyContent: 'center',
+              padding: SPACING * 2,
+              marginTop: 50,
+            }}
+            scrollEnabled={false}
+            removeClippedSubviews={false}
+            CellRendererComponent={({
+              item,
+              index,
+              children,
+              style,
+              ...props
+            }) => {
+              const newStyle = [style, { zIndex: data.length - index }];
+              return (
+                <View style={newStyle} index={index} {...props}>
+                  {children}
+                </View>
+              );
+            }}
+            renderItem={({ item, index }) => {
+              const inputRange = [index - 1, index, index + 1];
+              const translateX = scrollXAnimated.interpolate({
+                inputRange,
+                outputRange: [50, 0, -100],
+              });
+              const scale = scrollXAnimated.interpolate({
+                inputRange,
+                outputRange: [0.8, 1, 1.3],
+              });
+              const opacity = scrollXAnimated.interpolate({
+                inputRange,
+                outputRange: [1 - 1 / VISIBLE_ITEMS, 1, 0],
+              });
+
+              return (
+                <Animated.View
                   style={{
-                    width: ITEM_WIDTH*1.07,
-                    // height: ITEM_HEIGHT,
-                    borderRadius: 18,
-                    borderWidth: 5,
-                    // borderColor: item.accent,
-                    borderColor: 'black',
-                    // marginBottom: 10,
-                    borderRadius: 18,
-                    padding: 7,
-                    marginBottom: 10,
-                    backgroundColor: 'white',
+                    position: 'absolute',
+                    left: -ITEM_WIDTH / 2,
+                    opacity,
+                    transform: [
+                      {
+                        translateX,
+                      },
+                      { scale },
+                    ],
                   }}
                 >
-                  <View
+                  <Image
+                    source={{ uri: item.poster }}
                     style={{
                       width: ITEM_WIDTH,
                       height: ITEM_HEIGHT,
-                      // marginHorizontal: 17,
-                      overflow: 'hidden',
-                      alignItems: 'center',
                       borderRadius: 14,
-                      // backgroundColor: 'white',
                     }}
-                  >
-                    <Animated.Image
-                      source={item.photo }
-                      style={{
-                        width: ITEM_WIDTH ,
-                        height: ITEM_HEIGHT,
-                        resizeMode: 'cover',
-                        // backgroundColor: 'white',
-                        transform: [
-                          {
-                            translateX,
-                          },
-                        ],
-                      }}
-                    />
-                       
-                  </View >
-                  <Image 
-                      source={item.logo}
-                      style={{
-                        width:40,
-                        height:40,
-                        borderRadius: 60,
-                        borderWidth: 3,
-                        // borderColor: item.accent,
-                        borderColor: 'black',
-                        backgroundColor: 'white',
-                        position: 'absolute',
-                        bottom: -25,
-                        right: 60,
-            
-                      }}>
-                  </Image>
-                  
-                  
-                  
-                  <Text style={{ fontSize: 15, marginTop: 10,textAlign: 'justify', alignContent: 'center'}}>
-                    {item.text}
-                  </Text>
-                  
-                </View>
-                
-              </View>
-            );
-          }}
-        />
-      </SafeAreaView>
-    </View>
+                  />
+                </Animated.View>
+              );
+            }}
+          />
+        </SafeAreaView>
+      </FlingGestureHandler>
+    </FlingGestureHandler>
   );
-}
+})
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
-    alignItems: 'center',
     justifyContent: 'center',
-    
+    backgroundColor: '#fff',
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: '900',
+    textTransform: 'uppercase',
+    letterSpacing: -1,
+  },
+  location: {
+    fontSize: 16,
+  },
+  date: {
+    fontSize: 12,
+  },
+  itemContainer: {
+    height: OVERFLOW_HEIGHT,
+    padding: SPACING * 2,
+  },
+  itemContainerRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  overflowContainer: {
+    height: OVERFLOW_HEIGHT,
+    overflow: 'hidden',
   },
 });
