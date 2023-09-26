@@ -1,29 +1,24 @@
-import * as React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
-  StatusBar,
-  Text,
   View,
+  Text,
   StyleSheet,
-  FlatList,
   Image,
   Dimensions,
   Animated,
-  TouchableOpacity,
+  ScrollView,
+  FlatList,
   Platform,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-const { width, height } = Dimensions.get('window');
-import { MapPinIcon } from 'react-native-heroicons/solid';
-import { themeColors } from '../theme';
+import { StatusBar } from 'expo-status-bar';
 import { LinearGradient } from 'expo-linear-gradient';
-import { ScrollView } from 'react-native-gesture-handler';
 
+const { width, height } = Dimensions.get('window');
 const SPACING = 10;
 const ITEM_SIZE = Platform.OS === 'ios' ? width * 0.72 : width * 0.74;
 const EMPTY_ITEM_SIZE = (width - ITEM_SIZE) / 2;
 const BACKDROP_HEIGHT = height * 0.65;
-const FRONTDROP_HEIGHT = height - BACKDROP_HEIGHT;
-const ios = Platform.OS == 'ios';
 
 const Loading = () => (
   <View style={styles.loadingContainer}>
@@ -36,28 +31,31 @@ const hardcodedData = [
     key: '1',
     title: 'GDSC',
     description: 'Description',
-    poster: 'dsfsdfsdfsd',
-    backdrop: 'sdfsdfsdfsdf',
+    poster: 'https://i.postimg.cc/7Gxz6p6s/gdsc.jpg',
+    backdrop: 'https://i.postimg.cc/C1Vgf0G2/21.png',
+    release_date: '20 September 2023',
   },
   {
     key: '2',
-    title: 'WIE',
+    title: 'CSI',
     description: 'Description',
-    poster: 'fsdfsdfsdfdsfsd',
-    backdrop: 'fsdfsdfsdfdsfsd',
+    poster: 'https://i.postimg.cc/WdkgfGCn/csi.jpg',
+    backdrop: 'https://i.postimg.cc/MHBDhkMy/24.png',
+    release_date: '22 September 2023',
   },
   {
     key: '3',
-    title: 'IEEE',
+    title: 'IBF',
     description: 'Description',
-    poster: 'fsdfsdfsdfdsfsd',
-    backdrop: 'fsdfsdfsdfdsfsd',
+    poster: 'https://i.postimg.cc/vg3V63xQ/ibf.jpg',
+    backdrop: 'https://i.postimg.cc/5t8wm5zt/19.png',
+    release_date: '25 September 2023',
   },
 ];
 
 const Backdrop = ({ movies, scrollX }) => {
   return (
-    <View style={{ height: BACKDROP_HEIGHT, width, paddingTop: 80, position: 'absolute' }}>
+    <View style={{ height: BACKDROP_HEIGHT, width, position: 'absolute' }}>
       <FlatList
         data={movies.reverse()}
         keyExtractor={(item) => item.key + '-backdrop'}
@@ -70,7 +68,6 @@ const Backdrop = ({ movies, scrollX }) => {
           const translateX = scrollX.interpolate({
             inputRange: [(index - 2) * ITEM_SIZE, (index - 1) * ITEM_SIZE],
             outputRange: [0, width],
-            // extrapolate:'clamp'
           });
           return (
             <Animated.View
@@ -108,21 +105,70 @@ const Backdrop = ({ movies, scrollX }) => {
 };
 
 export default function App() {
-  const [movies] = React.useState([
-    { key: 'empty-left' },
-    ...hardcodedData,
-    { key: 'empty-right' },
-  ]);
-  const scrollX = React.useRef(new Animated.Value(0)).current;
+  const [events, setEvents] = useState([]);
+  const scrollX = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    const eventData = hardcodedData.map((event, index) => ({
+      key: index.toString(),
+      title: event.title,
+      description: event.description,
+      poster: event.poster,
+      backdrop: event.backdrop,
+    }));
+    setEvents([{ key: 'empty-left' }, ...eventData, { key: 'empty-right' }]);
+  }, []);
+
+  const renderEventCard = ({ item }) => {
+    if (!item.poster) {
+      return <View style={{ width: EMPTY_ITEM_SIZE }} />;
+    }
+
+    const inputRange = [
+      (parseInt(item.key) - 2) * ITEM_SIZE,
+      (parseInt(item.key) - 1) * ITEM_SIZE,
+      parseInt(item.key) * ITEM_SIZE,
+    ];
+
+    const translateY = scrollX.interpolate({
+      inputRange,
+      outputRange: [100, 50, 100],
+      extrapolate: 'clamp',
+    });
+
+    return (
+      <View style={{ width: ITEM_SIZE }}>
+        <Animated.View
+          style={{
+            marginHorizontal: SPACING,
+            padding: SPACING * 2,
+            alignItems: 'center',
+            transform: [{ translateY }],
+            backgroundColor: 'white',
+            marginBottom: 80,
+            borderRadius: 34,
+          }}
+        >
+          <Image source={{ uri: item.poster }} style={styles.posterImage} />
+          <Text style={{ fontSize: 24, marginTop: 20 }} numberOfLines={1}>
+            {item.title}
+          </Text>
+          <Text style={{ fontSize: 12, marginTop: 15 }} numberOfLines={3}>
+            {item.description}
+          </Text>
+        </Animated.View>
+      </View>
+    );
+  };
 
   return (
     <ScrollView>
       <View style={styles.container}>
-        <Backdrop movies={movies} scrollX={scrollX} />
+        <Backdrop movies={events} scrollX={scrollX} />
         <StatusBar />
         <Animated.FlatList
           showsHorizontalScrollIndicator={false}
-          data={movies}
+          data={events}
           keyExtractor={(item) => item.key}
           horizontal
           bounces={false}
@@ -135,56 +181,8 @@ export default function App() {
             useNativeDriver: false,
           })}
           scrollEventThrottle={16}
-          renderItem={({ item, index }) => {
-            if (!item.poster) {
-              return <View style={{ width: EMPTY_ITEM_SIZE }} />;
-            }
-
-            const inputRange = [
-              (index - 2) * ITEM_SIZE,
-              (index - 1) * ITEM_SIZE,
-              index * ITEM_SIZE,
-            ];
-
-            const translateY = scrollX.interpolate({
-              inputRange,
-              outputRange: [100, 50, 100],
-              extrapolate: 'clamp',
-            });
-
-            return (
-              <View style={{ width: ITEM_SIZE }}>
-                <Animated.View
-                  style={{
-                    marginHorizontal: SPACING,
-                    padding: SPACING * 2,
-                    alignItems: 'center',
-                    transform: [{ translateY }],
-                    backgroundColor: 'white',
-                    marginBottom: 100,
-
-                    borderRadius: 34,
-                  }}
-                >
-                  <Image source={{ uri: item.poster }} style={styles.posterImage} />
-                  <Text style={{ fontSize: 24 }} numberOfLines={1}>
-                    {item.title}
-                  </Text>
-                  <Text style={{ fontSize: 12, marginTop: 15 }} numberOfLines={3}>
-                    {item.description}
-                  </Text>
-                </Animated.View>
-              </View>
-            );
-          }}
+          renderItem={renderEventCard}
         />
-      </View>
-
-      <View>
-        <Text style={{ alignContent: 'center', fontSize: 43 }}>hello</Text>
-        <Text style={{ alignContent: 'center', fontSize: 43 }}>hello</Text>
-        <Text style={{ alignContent: 'center', fontSize: 43 }}>hello</Text>
-        <Text style={{ alignContent: 'center', fontSize: 43 }}>hello</Text>
       </View>
     </ScrollView>
   );
@@ -199,12 +197,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 0,
     height: height,
-  },
-  paragraph: {
-    margin: 24,
-    fontSize: 18,
-    fontWeight: 'bold',
-    textAlign: 'center',
   },
   posterImage: {
     width: '100%',
