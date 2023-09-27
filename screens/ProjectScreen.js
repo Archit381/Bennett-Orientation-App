@@ -90,7 +90,7 @@ const OverflowItems = ({ data, scrollXAnimated }) => {
     outputRange: [OVERFLOW_HEIGHT, 0, -OVERFLOW_HEIGHT],
   });
   return (
-    <View style={styles.overflowContainer}>
+    <View style={styles.overflowContainer} className={`mt-8`}>
       <Animated.View style={{ transform: [{ translateY }] }}>
         {data.map((item, index) => {
           return (
