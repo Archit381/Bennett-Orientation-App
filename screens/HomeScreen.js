@@ -1,8 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, StyleSheet, Image, Dimensions, Animated, ScrollView, FlatList, TouchableOpacity, Platform } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
-import axios from 'axios';
 import { themeColors } from '../theme';
 import { LinearGradient } from 'expo-linear-gradient';
 
@@ -40,7 +38,7 @@ const hardcodedData = [
     title: 'IBF',
     description: 'Description',
     poster: 'https://i.postimg.cc/vg3V63xQ/ibf.jpg',
-    backdrop: 'https://i.postimg.cc/5t8wm5zt/19.png',
+    backdrop: 'https://i.postimg.cc/vg3V63xQ/ibf.jpg',
     release_date: '25 September 2023',
   },
 ];
@@ -73,7 +71,7 @@ const Backdrop = ({ movies, scrollX }) => {
               }}
             >
               <Image
-                source={{ uri: item.backdrop }}
+                source={{ uri: item.poster }}
                 style={{
                   width,
                   height: BACKDROP_HEIGHT,
@@ -103,27 +101,17 @@ const Backdrop = ({ movies, scrollX }) => {
 
 export default function App() {
   const [events, setEvents] = useState([]);
-  const scrollX = React.useRef(new Animated.Value(0)).current;
+  const scrollX = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
-    axios.get('http://127.0.0.1:5000/get_data')
-      .then(response => {
-        if (response.data && Array.isArray(response.data)) {
-          const eventData = response.data.map((event, index) => ({
-            key: index.toString(),
-            title: event.event_name,
-            description: event.event_description,
-            poster: event.poster_image,
-            backdrop: event.cover_image,
-          }));
-          setEvents([{ key: 'empty-left' }, ...eventData, { key: 'empty-right' }]);
-        } else {
-          console.log('No data found in response');
-        }
-      })
-      .catch(error => {
-        console.log('Error fetching data:', error);
-      });
+    const eventData = hardcodedData.map((event, index) => ({
+      key: index.toString(),
+      title: event.title,
+      description: event.description,
+      poster: event.poster,
+      backdrop: event.backdrop,
+    }));
+    setEvents([{ key: 'empty-left' }, ...eventData, { key: 'empty-right' }]);
   }, []);
 
   const renderEventCard = ({ item }) => {
@@ -154,16 +142,15 @@ export default function App() {
             backgroundColor: 'white',
             marginBottom: 80,
             borderRadius: 34,
-
           }}
         >
           <Image source={{ uri: item.poster }} style={styles.posterImage} />
-              <Text style={{ fontSize: 24,marginTop: 20 }} numberOfLines={1}>
-                    {item.title}
-              </Text>
-              <Text style={{ fontSize: 12, marginTop: 15 }} numberOfLines={3}>
-                    {item.description}
-              </Text>
+          <Text style={{ fontSize: 24, marginTop: 20 }} numberOfLines={1}>
+            {item.title}
+          </Text>
+          <Text style={{ fontSize: 12, marginTop: 15 }} numberOfLines={3}>
+            {item.description}
+          </Text>
         </Animated.View>
       </View>
     );
