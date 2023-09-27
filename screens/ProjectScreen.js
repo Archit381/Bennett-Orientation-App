@@ -118,7 +118,7 @@ const OverflowItems = ({ data, scrollXAnimated }) => {
   );
 };
 
-export default gestureHandlerRootHOC(function App() {
+export default gestureHandlerRootHOC(function ProjectScreen() {
   const [data, setData] = React.useState(DATA);
   const scrollXIndex = React.useRef(new Animated.Value(0)).current;
   const scrollXAnimated = React.useRef(new Animated.Value(0)).current;
