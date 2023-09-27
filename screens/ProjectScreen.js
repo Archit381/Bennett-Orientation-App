@@ -24,7 +24,6 @@ import {
 } from 'react-native-gesture-handler';
 import { gestureHandlerRootHOC } from 'react-native-gesture-handler';
 
-// https://www.creative-flyers.com
 const DATA = [
   {
     title: 'Afro vibes',

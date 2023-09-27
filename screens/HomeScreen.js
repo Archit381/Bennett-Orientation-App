@@ -43,6 +43,33 @@ const hardcodedData = [
   },
 ];
 
+const hardcodedData1 = [
+  {
+    key: '1',
+    title: 'Mobilon',
+    img: require('../assets/logos/mobilon.png'),
+    description: "Discover the Internet Computer Protocol (ICP) and its groundbreaking influence on the internet. Engage in hands-on learning to explore ICP's diverse applications. As a bonus, receive 100 rupees worth of ICP tokens, making this event a must-attend for tech enthusiasts and innovators, offering a chance to influence the internet's future.",
+  },
+  {
+    key: '2',
+    title: 'Geeks for Geeks',
+    img: require('../assets/logos/gfg.png'),
+    description: "Get ready to embark on an exciting journey into the world of web development as HYPE, a hands-on program, kicks off on 12th September 2023. During this workshop, you'll have the opportunity to learn the ins and outs of creating and managing your very own portfolio website.", 
+  },
+  {
+    key: '3',
+    title: 'IEEE',
+    img: require('../assets/logos/ieee.png'),
+    description: "This event mostly focuses on first-year students, and it aims to educate about - What is GDSC, - our vision for the tenure, - how to get started with coding as an absolute beginner, - Get a chance to interact with our senior mentors. - Win some stickers and get early access to junior core team forms.",
+  },
+  {
+    key: '4',
+    title: 'Google Developer Student Club',
+    img: require('../assets/logos/GDSC.png'),
+    description: "This event mostly focuses on first-year students, and it aims to educate about - What is GDSC, - our vision for the tenure, - how to get started with coding as an absolute beginner, - Get a chance to interact with our senior mentors. - Win some stickers and get early access to junior core team forms.",
+  },
+];
+
 const Backdrop = ({ movies, scrollX }) => {
   return (
     <View style={{ height: BACKDROP_HEIGHT, width, position: 'absolute' }}>
@@ -58,7 +85,7 @@ const Backdrop = ({ movies, scrollX }) => {
           const translateX = scrollX.interpolate({
             inputRange: [(index - 2) * ITEM_SIZE, (index - 1) * ITEM_SIZE],
             outputRange: [0, width],
-            // extrapolate:'clamp'
+            extrapolate:'clamp'
           });
           return (
             <Animated.View
@@ -114,15 +141,16 @@ export default function App() {
     setEvents([{ key: 'empty-left' }, ...eventData, { key: 'empty-right' }]);
   }, []);
 
-  const renderEventCard = ({ item }) => {
+  const renderEventCard = ({ item, index }) => {
     if (!item.poster) {
       return <View style={{ width: EMPTY_ITEM_SIZE }} />;
     }
 
     const inputRange = [
-      (parseInt(item.key) - 2) * ITEM_SIZE,
-      (parseInt(item.key) - 1) * ITEM_SIZE,
-      parseInt(item.key) * ITEM_SIZE,
+      (index - 2) * ITEM_SIZE,
+      (index - 1) * ITEM_SIZE,
+      index * ITEM_SIZE,
+ 
     ];
 
     const translateY = scrollX.interpolate({
@@ -160,7 +188,6 @@ export default function App() {
     <ScrollView>
       <View style={styles.container}>
         <Backdrop movies={events} scrollX={scrollX} />
-        <StatusBar />
         <Animated.FlatList
           showsHorizontalScrollIndicator={false}
           data={events}
@@ -181,16 +208,16 @@ export default function App() {
       </View>
 
       <View>
-      <Text style={{ fontSize: 30, fontWeight: 'bold', color: themeColors.textNeutral,marginBottom: 15,marginStart: 16 }}>PostBox</Text>
+      <Text style={{ fontSize: 30, fontWeight: 'bold', color: themeColors.textNeutral,marginBottom: 15,marginStart: 16 }}>Announcements</Text>
       <FlatList
-        data={hardcodedData}
+        data={hardcodedData1}
         keyExtractor={item=> item.key}
         horizontal={true}
         renderItem={({ item }) => 
         <View style={{backgroundColor: 'white', height: 170,width: width*0.8, marginStart: 30, borderRadius: 30, marginBottom: 25}}>
         <View className={'flex-row items-center'}>
         <Image  
-          source={require('../assets/logos/mobilon.png')}
+          source={item.img}
           style={{
             marginHorizontal: 20,
             marginTop: 20,
@@ -204,7 +231,7 @@ export default function App() {
         <Text style={{fontSize: 15, fontWeight: 'bold'}}>{item.title}</Text>
         </View>
   
-        <Text style={{marginHorizontal: 20, marginTop: 20}} numberOfLines={2}>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam
+        <Text style={{marginHorizontal: 20, marginTop: 20}} numberOfLines={2}>{item.description}
         </Text>
          
       </View>
