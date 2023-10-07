@@ -24,7 +24,6 @@ import {
 } from 'react-native-gesture-handler';
 import { gestureHandlerRootHOC } from 'react-native-gesture-handler';
 
-// https://www.creative-flyers.com
 const DATA = [
   {
     title: 'Afro vibes',
@@ -90,7 +89,7 @@ const OverflowItems = ({ data, scrollXAnimated }) => {
     outputRange: [OVERFLOW_HEIGHT, 0, -OVERFLOW_HEIGHT],
   });
   return (
-    <View style={styles.overflowContainer}>
+    <View style={styles.overflowContainer} className={`mt-8`}>
       <Animated.View style={{ transform: [{ translateY }] }}>
         {data.map((item, index) => {
           return (
@@ -118,7 +117,7 @@ const OverflowItems = ({ data, scrollXAnimated }) => {
   );
 };
 
-export default gestureHandlerRootHOC(function App() {
+export default gestureHandlerRootHOC(function ProjectScreen() {
   const [data, setData] = React.useState(DATA);
   const scrollXIndex = React.useRef(new Animated.Value(0)).current;
   const scrollXAnimated = React.useRef(new Animated.Value(0)).current;
@@ -170,7 +169,6 @@ export default gestureHandlerRootHOC(function App() {
         }}
       >
         <SafeAreaView style={styles.container}>
-          <StatusBar hidden />
           <OverflowItems data={data} scrollXAnimated={scrollXAnimated} />
           <FlatList
             data={data}
