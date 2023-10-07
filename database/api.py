@@ -13,7 +13,7 @@ def load_data():
 @app.route('/', methods=['GET']) 
 @cross_origin()
 def health():
-    return "Hello"
+    return "Event Data API for Clubs&Chaps, route: /get_data"
 
 
 @app.route('/get_data', methods=['GET']) 

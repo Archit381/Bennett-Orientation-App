@@ -16,6 +16,7 @@ const Loading = () => (
     <Text style={styles.paragraph}>Loading...</Text>
   </View>
 );
+
 const hardcodedData = [
   {
     key: '1',
@@ -44,6 +45,7 @@ const hardcodedData = [
 ];
 
 const Backdrop = ({ movies, scrollX }) => {
+
   return (
     <View style={{ height: BACKDROP_HEIGHT, width, position: 'absolute' }}>
       <FlatList
