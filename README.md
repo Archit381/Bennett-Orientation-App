@@ -12,3 +12,5 @@ Real-time Event Notifications: Stay informed about the latest happenings.
 Club Connectivity: Reach out effortlessly for a productive and growth-oriented environment.
 
 Your personalized Bennett journey starts here!
+
+![images](https://github.com/Archit381/Bennett-Orientation-App/blob/final/assets/buzine.png)
