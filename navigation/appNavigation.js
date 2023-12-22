@@ -85,7 +85,6 @@ const menuIcons = (route, focused)=> {
     icon =  focused? <InformationCircleIcon size="30" color={themeColors.bgred} /> : <InformationCircleIcon size="30" strokeWidth={2} color="white" />
   }
 
-  
   let buttonClass = focused? "bg-white": "";
   return (
     <View className={"flex items-center rounded-full p-3 shadow " + buttonClass}>

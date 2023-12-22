@@ -83,7 +83,7 @@ export default function AboutScreen() {
       <View style={{ flex: 1, justifyContent: 'center', marginTop: ios ? 2 : 0 }}>
         <Carousel
           data={filteredClubItems}
-          renderItem={({ item }) => <ChapterCard item={item} />}
+          renderItem={({ item }) => <ChapterCard item={item} />}  
           firstItem={1}
           loop={true}
           inactiveSlideScale={0.75}

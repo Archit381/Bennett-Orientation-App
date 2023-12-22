@@ -21,24 +21,24 @@ const hardcodedData = [
     key: '1',
     title: 'Exploring the ICP',
     description: "Discover the Internet Computer Protocol (ICP) and its groundbreaking influence on the internet. Engage in hands-on learning to explore ICP's diverse applications. As a bonus, receive 100 rupees worth of ICP tokens, making this event a must-attend for tech enthusiasts and innovators, offering a chance to influence the internet's future.",
-    poster: 'https://instagram.fdel72-1.fna.fbcdn.net/v/t51.2885-15/376860745_7064389703591629_5285187086017684065_n.webp?stp=dst-jpg_e35&_nc_ht=instagram.fdel72-1.fna.fbcdn.net&_nc_cat=101&_nc_ohc=i-xEy55S5r4AX8kWlep&edm=ACWDqb8BAAAA&ccb=7-5&ig_cache_key=MzE4ODM2MjUyNzQ0ODUzOTI3MQ%3D%3D.2-ccb7-5&oh=00_AfCDYp1PMjhFmqzSozXDXzgeJ7BarbnZB9QM25jv0d-elQ&oe=651739B8&_nc_sid=ee9879',
-    backdrop: 'https://instagram.fdel72-1.fna.fbcdn.net/v/t51.2885-15/376860745_7064389703591629_5285187086017684065_n.webp?stp=dst-jpg_e35&_nc_ht=instagram.fdel72-1.fna.fbcdn.net&_nc_cat=101&_nc_ohc=i-xEy55S5r4AX8kWlep&edm=ACWDqb8BAAAA&ccb=7-5&ig_cache_key=MzE4ODM2MjUyNzQ0ODUzOTI3MQ%3D%3D.2-ccb7-5&oh=00_AfCDYp1PMjhFmqzSozXDXzgeJ7BarbnZB9QM25jv0d-elQ&oe=651739B8&_nc_sid=ee9879',
+    poster: 'https://www.creative-flyers.com/wp-content/uploads/2020/07/Afro-vibes-flyer-template.jpg',
+    backdrop: 'https://www.creative-flyers.com/wp-content/uploads/2020/07/Afro-vibes-flyer-template.jpg',
     release_date: '12 September 2023',
   },
   {
     key: '2',
     title: 'Hack your Profile',
     description: "Get ready to embark on an exciting journey into the world of web development as HYPE, a hands-on program, kicks off on 12th September 2023. During this workshop, you'll have the opportunity to learn the ins and outs of creating and managing your very own portfolio website.", 
-    poster: 'https://instagram.fdel72-1.fna.fbcdn.net/v/t51.2885-15/373612223_323345150088620_6622840979533480652_n.heic?stp=dst-jpg_e35&_nc_ht=instagram.fdel72-1.fna.fbcdn.net&_nc_cat=108&_nc_ohc=FJzjbEJ_f2MAX9mfDTl&edm=ACWDqb8BAAAA&ccb=7-5&ig_cache_key=MzE4MzU4OTI1ODc3ODQ5NjUxMw%3D%3D.2-ccb7-5&oh=00_AfDCyAheF8fmd5pFWaF0jh3bQz5eJF1u7jkSThvMLxY-sw&oe=6516F1B9&_nc_sid=ee9879',
-    backdrop: 'https://instagram.fdel72-1.fna.fbcdn.net/v/t51.2885-15/373612223_323345150088620_6622840979533480652_n.heic?stp=dst-jpg_e35&_nc_ht=instagram.fdel72-1.fna.fbcdn.net&_nc_cat=108&_nc_ohc=FJzjbEJ_f2MAX9mfDTl&edm=ACWDqb8BAAAA&ccb=7-5&ig_cache_key=MzE4MzU4OTI1ODc3ODQ5NjUxMw%3D%3D.2-ccb7-5&oh=00_AfDCyAheF8fmd5pFWaF0jh3bQz5eJF1u7jkSThvMLxY-sw&oe=6516F1B9&_nc_sid=ee9879',
+    poster: 'https://www.creative-flyers.com/wp-content/uploads/2019/11/Jungle-Party-Flyer-Template-1.jpg',
+    backdrop: 'https://www.creative-flyers.com/wp-content/uploads/2019/11/Jungle-Party-Flyer-Template-1.jpg',
     release_date: '22 September 2023',
   },
   {
     key: '3',
     title: 'Info Session',
     description: "This event mostly focuses on first-year students, and it aims to educate about - What is GDSC, - our vision for the tenure, - how to get started with coding as an absolute beginner, - Get a chance to interact with our senior mentors. - Win some stickers and get early access to junior core team forms.",
-    poster: 'https://instagram.fdel72-1.fna.fbcdn.net/v/t51.2885-15/377263021_331984496000541_2030354148840462498_n.heic?stp=dst-jpg_e35&_nc_ht=instagram.fdel72-1.fna.fbcdn.net&_nc_cat=109&_nc_ohc=ZJkE0UISI3UAX8vA2IE&edm=ACWDqb8BAAAA&ccb=7-5&ig_cache_key=MzE5MDM1NTk0NTMxODIxNjM4NA%3D%3D.2-ccb7-5&oh=00_AfBLp7fGVPl9noVHCSVbeTkrwE6GqPudY48GyyB_DzJvag&oe=65166835&_nc_sid=ee9879',
-    backdrop: "https://instagram.fdel72-1.fna.fbcdn.net/v/t51.2885-15/377263021_331984496000541_2030354148840462498_n.heic?stp=dst-jpg_e35&_nc_ht=instagram.fdel72-1.fna.fbcdn.net&_nc_cat=109&_nc_ohc=ZJkE0UISI3UAX8vA2IE&edm=ACWDqb8BAAAA&ccb=7-5&ig_cache_key=MzE5MDM1NTk0NTMxODIxNjM4NA%3D%3D.2-ccb7-5&oh=00_AfBLp7fGVPl9noVHCSVbeTkrwE6GqPudY48GyyB_DzJvag&oe=65166835&_nc_sid=ee9879",
+    poster: 'https://www.creative-flyers.com/wp-content/uploads/2020/06/4th-Of-July-Invitation.jpg',
+    backdrop: "https://www.creative-flyers.com/wp-content/uploads/2020/06/4th-Of-July-Invitation.jpg",
     release_date: '14 September 2023',
   },
 ];
@@ -239,23 +239,8 @@ export default function App() {
 
       </FlatList>
       
-    <View>
-      <Text style={{ fontSize: 30, fontWeight: 'bold', color: themeColors.textNeutral,marginBottom: 15,marginStart: 16 }}>Dean of SCSET</Text>
-    </View>
-    
-    <View style={{alignItems: 'center', marginBottom : 30}}>
-      <Image source={require('../assets/dean_pic.webp')} style={{height: 150, width: 150,borderRadius: 20}}></Image>
-      <Text style={{marginTop: 10, fontWeight: 'bold', fontSize: 15}}>Prof. (Dr.) Abhay Bansal</Text> 
-    </View>
-    
-    <View className={'flex-row'}>
-    <View style={{backgroundColor: 'white', height: 200,width: width*0.40,marginHorizontal: 20, borderRadius: 30, marginBottom: 25}}>
-      <View className={'flex-row items-center'}></View>
-    </View>
-    <View style={{backgroundColor: 'white', height: 200,width: width*0.4,marginHorizontal: 20, borderRadius: 30, marginBottom: 25}}>
-      <View className={'flex-row items-center'}></View>
-    </View>
-    </View>      
+
+         
 
     </View> 
     </ScrollView>

@@ -6,6 +6,7 @@ import { useNavigation } from '@react-navigation/native'
 import { ArrowRightIcon } from 'react-native-heroicons/outline';
 const {width, height} = Dimensions.get('window');
 const ios = Platform.OS == 'ios';
+
 function ChapterCard({item}) {
   const navigation = useNavigation();
   return (
