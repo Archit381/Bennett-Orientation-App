@@ -14,3 +14,13 @@ Club Connectivity: Reach out effortlessly for a productive and growth-oriented e
 Your personalized Bennett journey starts here!
 
 ![images](https://github.com/Archit381/Bennett-Orientation-App/blob/final/assets/buzine.png)
+
+# How to Setup ?
+
+Step1: Clone this Repository into your local machine
+
+Step2: Go inside the folder and run "npm install"
+
+Step3: To Start the App run "npm run start"
+
+# Thank You !
